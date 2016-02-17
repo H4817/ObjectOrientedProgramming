@@ -44,14 +44,14 @@ void GetBitmapData(const BITMAPINFOHEADER &bih, signed int &bmpWidth, signed int
         bmpClrUsed = bih.biClrUsed;
         if (bmpClrUsed == 0)
         {
-            bmpClrUsed = 1 << bitCount;
+            bmpClrUsed = (unsigned int) (1 << bitCount);
         }
     }
 
     bmpSize = bih.biSizeImage;
     if (bmpSize == 0)
     {
-        bmpSize = (long) ((bmpWidth * bmpHeight) * bitCount / 8);
+        bmpSize = (unsigned int) ((bmpWidth * bmpHeight) * bitCount / 8);
     }
 }
 
@@ -77,6 +77,8 @@ void PrintBitmapData(signed int bmpWidth, signed int bmpHeight, unsigned short b
             break;
         case 5:
             printf("Used PNG compression\n");
+            break;
+        default:
             break;
     }
 
