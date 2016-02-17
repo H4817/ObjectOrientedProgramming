@@ -65,11 +65,11 @@ int main(int argc, char *argv[])
         printf("\nNumber parameters is wrong");
         return -1;
     }
-    char *numb = *&argv[1];
+    char *numb = argv[1];
     double A = atof(numb);
-    numb = *&argv[2];
+    numb = argv[2];
     double B = atof(numb);
-    numb = *&argv[3];
+    numb = argv[3];
     double C = atof(numb);
     double discriminant = CalculatingDiscriminant(A, B, C);
     vector<double> roots = CalculatingRootsOfEquation(A, B, C, discriminant);
