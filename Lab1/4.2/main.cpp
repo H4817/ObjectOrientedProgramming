@@ -93,23 +93,23 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    FILE *f;
-    if (!(f = fopen(argv[1], "rb")))
+    FILE *inputFile;
+    if (!(inputFile = fopen(argv[1], "rb")))
     {
         printf("Error with opening input file\n");
         return 1;
     }
-    fseek(f, 0, SEEK_SET);
+    fseek(inputFile, 0, SEEK_SET);
 
     BITMAPFILEHEADER bfh;
     BITMAPINFOHEADER bih;
-    if (!ReadFileHeaders(f, bfh, bih) || bfh.bfType != 0x4D42)
+    if (!ReadFileHeaders(inputFile, bfh, bih) || bfh.bfType != 0x4D42)
     {
-        printf("Not a bitmap file\n");
-        fclose(f);
+        printf("This isn't a bitmap file\n");
+        fclose(inputFile);
         return 1;
     }
-    fclose(f);
+    fclose(inputFile);
 
     signed int bmpWidth, bmpHeight;
     unsigned short bitCount;
