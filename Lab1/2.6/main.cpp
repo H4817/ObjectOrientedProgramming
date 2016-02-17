@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <iomanip>
 
 using namespace std;
 
@@ -42,12 +43,12 @@ bool ToOutputResult(double &Discriminant, double &A, vector<double> roots)
     }
     if (Discriminant > 0)
     {
-        cout << roots[0] << " " << roots[1] << endl;
+        cout << setprecision(4) << roots[0] << " " << roots[1] << endl;
         return true;
     }
     else if (Discriminant == 0)
     {
-        cout << roots[0] << endl;
+        cout << setprecision(4) << roots[0] << endl;
         return true;
     }
     else
