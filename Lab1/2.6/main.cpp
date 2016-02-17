@@ -34,7 +34,7 @@ vector<double> CalculatingRootsOfEquation(double &A, double &B, double &C, doubl
     }
 }
 
-bool ToOutputResult(double &Discriminant, double &A, vector<double> roots)
+bool OutputResult(double &Discriminant, double &A, vector<double> roots)
 {
     if (A == 0)
     {
@@ -73,6 +73,6 @@ int main(int argc, char *argv[])
     double C = atof(numb);
     double discriminant = CalculatingDiscriminant(A, B, C);
     vector<double> roots = CalculatingRootsOfEquation(A, B, C, discriminant);
-    ToOutputResult(discriminant, A, roots);
+    OutputResult(discriminant, A, roots);
     return 0;
 }
