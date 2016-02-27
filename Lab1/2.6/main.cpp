@@ -5,6 +5,11 @@
 
 using namespace std;
 
+bool IsNotCorrectArguments(char numb)
+{
+    return !isdigit(numb);
+}
+
 double CalculateDiscriminant(const double &a, const double &b, const double &c)
 {
     return b * b - 4 * a * c;
@@ -52,14 +57,9 @@ bool OutputResult(const double &discriminant, const double &a, vector<double> ro
         cout << setprecision(4) << roots[0] << endl;
         return true;
     }
-    else if (discriminant < 0)
-    {
-        cout << "There is no real root, discriminant < 0" << endl;
-        return false;
-    }
     else
     {
-        cout << "There is no real root, input is wrong" << endl;
+        cout << "There is no real root, discriminant < 0" << endl;
         return false;
     }
 }
@@ -68,8 +68,16 @@ int main(int argc, char *argv[])
 {
     if (argc != 4)
     {
-        cout << "Number parameters is wrong" << endl;
+        cout << "Number parameters is wrong, you should put three parameters into command line" << endl;
         return -1;
+    }
+    for (size_t i = 1; i < 4; ++i)
+    {
+        if (IsNotCorrectArguments(*argv[i]))
+        {
+            cout << "There is no real root, input is wrong: " << argv[i] << endl;
+            return -1;
+        }
     }
     char *numb = argv[1];
     double a = atof(numb);
