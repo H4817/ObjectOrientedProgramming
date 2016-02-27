@@ -29,7 +29,6 @@ int main(int argc, char *argv[])
             cout << lineCounter << endl;
             isStringFound = true;
         }
-
         ++lineCounter;
     }
     if (!isStringFound)
