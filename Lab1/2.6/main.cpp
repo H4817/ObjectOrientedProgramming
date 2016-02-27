@@ -5,27 +5,28 @@
 
 using namespace std;
 
-double CalculatingDiscriminant(double &A, double &B, double &C)
+double CalculateDiscriminant(const double &a, const double &b, const double &c)
 {
-    return B * B - 4 * A * C;
+    return b * b - 4 * a * c;
 }
 
-vector<double> CalculatingRootsOfEquation(double &A, double &B, double &C, double &Discriminant)
+vector<double> CalculateRootsOfEquation(const double &a, const double &b, const double &c)
 {
+    double discriminant = CalculateDiscriminant(a, b, c);
     vector<double> roots;
-    if (A == 0)
+    if (a == 0)
     {
         return roots;
     }
-    else if (Discriminant > 0)
+    else if (discriminant > 0)
     {
-        roots.push_back((-B + sqrt(Discriminant)) / (2 * A));
-        roots.push_back((-B - sqrt(Discriminant)) / (2 * A));
+        roots.push_back((-b + sqrt(discriminant)) / (2 * a));
+        roots.push_back((-b - sqrt(discriminant)) / (2 * a));
         return roots;
     }
-    else if (Discriminant == 0)
+    else if (discriminant == 0)
     {
-        roots.push_back(-B / (2 * A));
+        roots.push_back(-b / (2 * a));
         return roots;
     }
     else
@@ -34,26 +35,31 @@ vector<double> CalculatingRootsOfEquation(double &A, double &B, double &C, doubl
     }
 }
 
-bool OutputResult(double &Discriminant, double &A, vector<double> roots)
+bool OutputResult(const double &discriminant, const double &a, vector<double> roots)
 {
-    if (A == 0)
+    if (a == 0)
     {
-        cout << "Error, it's a not quadratic equation" << endl;
+        cout << "Error, it's a not quadratic equation, a == 0" << endl;
         return false;
     }
-    if (Discriminant > 0)
+    if (discriminant > 0)
     {
         cout << setprecision(4) << roots[0] << " " << roots[1] << endl;
         return true;
     }
-    else if (Discriminant == 0)
+    else if (discriminant == 0)
     {
         cout << setprecision(4) << roots[0] << endl;
         return true;
     }
+    else if (discriminant < 0)
+    {
+        cout << "There is no real root, discriminant < 0" << endl;
+        return false;
+    }
     else
     {
-        cout << "There is no real root" << endl;
+        cout << "There is no real root, input is wrong" << endl;
         return false;
     }
 }
@@ -66,13 +72,13 @@ int main(int argc, char *argv[])
         return -1;
     }
     char *numb = argv[1];
-    double A = atof(numb);
+    double a = atof(numb);
     numb = argv[2];
-    double B = atof(numb);
+    double b = atof(numb);
     numb = argv[3];
-    double C = atof(numb);
-    double discriminant = CalculatingDiscriminant(A, B, C);
-    vector<double> roots = CalculatingRootsOfEquation(A, B, C, discriminant);
-    OutputResult(discriminant, A, roots);
+    double c = atof(numb);
+    double discriminant = CalculateDiscriminant(a, b, c);
+    vector<double> roots = CalculateRootsOfEquation(a, b, c);
+    OutputResult(discriminant, a, roots);
     return 0;
 }
