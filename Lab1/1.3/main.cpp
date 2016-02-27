@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     if (argc != 3)
     {
         cout <<
-        "Number parameters is wrong. The first param which you should put into command line is a filename and the second is string which you want to find" <<
+        "Number parameters is wrong. The first parameter which you should put into command line is a filename and the second is string which you want to find" <<
         endl;
         return 1;
     }
