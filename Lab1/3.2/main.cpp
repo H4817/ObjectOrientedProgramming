@@ -1,184 +1,167 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <iomanip>
 
 using namespace std;
 
-const int AMOUNT_LINES = 3;
-const int AMOUNT_COLUMN = 3;
+const size_t AMOUNT_LINES = 3;
+const size_t AMOUNT_COLUMN = 3;
 
-struct Data
+double CalculateDeterminant(double matrix[AMOUNT_LINES][AMOUNT_COLUMN])
 {
-    double Matrix[AMOUNT_LINES][AMOUNT_COLUMN];
-    double MatrixOfMinors[AMOUNT_LINES][AMOUNT_COLUMN];
-    double TransposeCofactorMatrix[AMOUNT_LINES][AMOUNT_COLUMN];
-    FILE *matrixFile;
-    char line[255];
-    double determinant;
-    int linesCounter = 0;
-    int columnCounter = 0;
-};
-
-void CalculatingDeterminant(Data &data)
-{
-    for (int i = 0; i < AMOUNT_COLUMN; ++i)
+    double determinant = NULL;
+    for (size_t i = 0; i < AMOUNT_COLUMN; ++i)
     {
         vector<double> partOfMatrix;
-        for (int linesCounter = 0; linesCounter < AMOUNT_LINES; ++linesCounter)
+        for (size_t linesCounter = 0; linesCounter < AMOUNT_LINES; ++linesCounter)
         {
-            for (int columnCounter = 0; columnCounter < AMOUNT_COLUMN; ++columnCounter)
+            for (size_t columnCounter = 0; columnCounter < AMOUNT_COLUMN; ++columnCounter)
             {
                 if (columnCounter != i && linesCounter != 0)
                 {
-                    partOfMatrix.push_back(data.Matrix[linesCounter][columnCounter]);
+                    partOfMatrix.push_back(matrix[linesCounter][columnCounter]);
                     if (partOfMatrix.size() == 4)
                     {
                         double currentMinor = ((partOfMatrix[0] * partOfMatrix[3]) -
                                                (partOfMatrix[1] * partOfMatrix[2]));
-                        data.MatrixOfMinors[data.linesCounter][i] = currentMinor;
-                        if (i % 2 == 0) 
+                        if (i % 2 == 0)
                         {
-                            data.determinant += (currentMinor * data.Matrix[data.linesCounter][i]);
+                            determinant += (currentMinor * matrix[0][i]);
                         }
-                        else 
+                        else
                         {
-                            data.determinant -= (currentMinor * data.Matrix[data.linesCounter][i]);
+                            determinant -= (currentMinor * matrix[0][i]);
                         }
                     }
                 }
             }
         }
     }
-    if (data.determinant == 0)
-    {
-        printf("Impossible to create reverse matrix, determinant == 0");
-        exit(EXIT_FAILURE);
-    }
-    ++data.linesCounter;
+    return determinant;
 }
 
-void CalculatingMatrixOfMinors(Data &data) 
+void CalculateMatrixOfMinors(double matrix[AMOUNT_LINES][AMOUNT_COLUMN],
+                             double (&matrixOfMinors)[AMOUNT_LINES][AMOUNT_COLUMN], size_t &g_linesCounter)
 {
-    for (int i = 0; i < AMOUNT_COLUMN; ++i) 
+    for (size_t i = 0; i < AMOUNT_COLUMN; ++i)
     {
         vector<double> partOfMatrix;
-        for (int linesCounter = 0; linesCounter < AMOUNT_LINES; ++linesCounter)
+        for (size_t linesCounter = 0; linesCounter < AMOUNT_LINES; ++linesCounter)
         {
-            for (int columnCounter = 0; columnCounter < AMOUNT_COLUMN; ++columnCounter)
+            for (size_t columnCounter = 0; columnCounter < AMOUNT_COLUMN; ++columnCounter)
             {
-                if (columnCounter != i && linesCounter != data.linesCounter)
+                if (columnCounter != i && linesCounter != g_linesCounter)
                 {
-                    partOfMatrix.push_back(data.Matrix[linesCounter][columnCounter]);
+                    partOfMatrix.push_back(matrix[linesCounter][columnCounter]);
                     if (partOfMatrix.size() == 4)
                     {
-                        data.MatrixOfMinors[data.linesCounter][i] = ((partOfMatrix[0] * partOfMatrix[3]) -
-                                                                     (partOfMatrix[1] * partOfMatrix[2]));
+                        matrixOfMinors[g_linesCounter][i] = ((partOfMatrix[0] * partOfMatrix[3]) -
+                                                             (partOfMatrix[1] * partOfMatrix[2]));
                     }
                 }
             }
         }
     }
-    if (data.linesCounter < AMOUNT_LINES) 
+    if (g_linesCounter < AMOUNT_LINES)
     {
-        ++data.linesCounter;
-        CalculatingMatrixOfMinors(data);
+        ++g_linesCounter;
+        CalculateMatrixOfMinors(matrix, matrixOfMinors, g_linesCounter);
     }
 }
 
-void CalculatingCofactorMatrix(Data &data) 
+void CalculateCofactorMatrix(double (&matrixOfMinors)[AMOUNT_LINES][AMOUNT_COLUMN])
 {
-    for (int linesCounter = 0; linesCounter < AMOUNT_LINES; ++linesCounter) 
+    for (size_t linesCounter = 0; linesCounter < AMOUNT_LINES; ++linesCounter)
     {
-        for (int columnCounter = 0; columnCounter < AMOUNT_COLUMN; ++columnCounter) 
+        for (size_t columnCounter = 0; columnCounter < AMOUNT_COLUMN; ++columnCounter)
         {
-            if (linesCounter % 2 == 0 && columnCounter % 2 != 0) 
+            if (linesCounter % 2 == 0 && columnCounter % 2 != 0)
             {
-                data.MatrixOfMinors[linesCounter][columnCounter] = -data.MatrixOfMinors[linesCounter][columnCounter];
+                matrixOfMinors[linesCounter][columnCounter] = -matrixOfMinors[linesCounter][columnCounter];
             }
             else if (linesCounter % 2 != 0 && columnCounter % 2 == 0)
             {
-                data.MatrixOfMinors[linesCounter][columnCounter] = -data.MatrixOfMinors[linesCounter][columnCounter];
+                matrixOfMinors[linesCounter][columnCounter] = -matrixOfMinors[linesCounter][columnCounter];
             }
         }
     }
 }
 
-void CalculatingTransposeCofactorMatrix(Data &data)
+void CalculateTransposeCofactorMatrix(double matrixOfMinors[AMOUNT_LINES][AMOUNT_COLUMN],
+                                      double (&transposeCofactorMatrix)[AMOUNT_LINES][AMOUNT_COLUMN])
 {
-    for (int linesCounter = 0; linesCounter < AMOUNT_LINES; ++linesCounter) 
+    for (size_t linesCounter = 0; linesCounter < AMOUNT_LINES; ++linesCounter)
     {
-        for (int columnCounter = 0; columnCounter < AMOUNT_COLUMN; ++columnCounter) 
+        for (size_t columnCounter = 0; columnCounter < AMOUNT_COLUMN; ++columnCounter)
         {
-            data.TransposeCofactorMatrix[linesCounter][columnCounter] = data.MatrixOfMinors[columnCounter][linesCounter];
+            transposeCofactorMatrix[linesCounter][columnCounter] = matrixOfMinors[columnCounter][linesCounter];
         }
     }
 }
 
-void MultiplyingMatrixByDeterminant(Data &data)
+void MultiplyMatrixByDeterminant(double (&transposeCofactorMatrix)[AMOUNT_LINES][AMOUNT_COLUMN], double determinant)
 {
-    for (int linesCounter = 0; linesCounter < AMOUNT_LINES; ++linesCounter)
+    for (size_t linesCounter = 0; linesCounter < AMOUNT_LINES; ++linesCounter)
     {
-        for (int columnCounter = 0; columnCounter < AMOUNT_COLUMN; ++columnCounter) 
+        for (size_t columnCounter = 0; columnCounter < AMOUNT_COLUMN; ++columnCounter)
         {
-            data.TransposeCofactorMatrix[linesCounter][columnCounter] *= 1 / data.determinant;
+            transposeCofactorMatrix[linesCounter][columnCounter] *= 1 / determinant;
         }
     }
 }
 
-void OutputResult(Data &data)
+void OutputResult(double transposeCofactorMatrix[AMOUNT_LINES][AMOUNT_COLUMN])
 {
-    for (int linesCounter = 0; linesCounter < AMOUNT_LINES; ++linesCounter) 
+    for (size_t linesCounter = 0; linesCounter < AMOUNT_LINES; ++linesCounter)
     {
-        for (int columnCounter = 0; columnCounter < AMOUNT_COLUMN; ++columnCounter) 
+        for (size_t columnCounter = 0; columnCounter < AMOUNT_COLUMN; ++columnCounter)
         {
-            printf("%.3f ", data.TransposeCofactorMatrix[linesCounter][columnCounter]);
+            cout << setprecision(3) << transposeCofactorMatrix[linesCounter][columnCounter] << '\t';
         }
-        printf("\n");
+        cout << endl;
     }
 }
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
-    Data data;
-    if (argc != 2) 
+    double matrix[AMOUNT_LINES][AMOUNT_COLUMN];
+    double matrixOfMinors[AMOUNT_LINES][AMOUNT_COLUMN];
+    double transposeCofactorMatrix[AMOUNT_LINES][AMOUNT_COLUMN];
+    size_t g_linesCounter = 0;
+    ifstream inputFile(argv[1]);
+    if (argc != 2)
     {
-        printf("\nNumber parameters is wrong");
+        cout << "Number parameters is wrong" << endl;
         return -1;
     }
-    data.matrixFile = fopen(argv[1], "r");
-    if (data.matrixFile == NULL)
+    if (inputFile == NULL)
     {
-        printf("\nCan not open file %s", argv[1]);
+        cout << "Can not open file " << argv[1] << endl;
         return -1;
     }
-    while (fgets(data.line, 255, data.matrixFile) != NULL) 
+    for (size_t i = 0; i < AMOUNT_LINES; i++)
     {
-        string str(data.line);
-        string buf;
-        data.columnCounter = 0;
-        for (int counter = 0; counter < str.size() + 5555; ++counter)
+        for (size_t j = 0; j < AMOUNT_COLUMN; j++)
         {
-            if (str[counter] != '\t')
-            {
-                buf += str[counter];
-            }
-            else 
-            {
-                data.Matrix[data.linesCounter][data.columnCounter] = atof(buf.c_str());
-                ++data.columnCounter;
-                buf = "";
-            }
+            inputFile >> matrix[i][j];
         }
-        ++data.linesCounter;
     }
-    data.linesCounter = 0;
 
-    CalculatingDeterminant(data);
-    CalculatingMatrixOfMinors(data);
-    CalculatingCofactorMatrix(data);
-    CalculatingTransposeCofactorMatrix(data);
-    MultiplyingMatrixByDeterminant(data);
-    OutputResult(data);
+    double determinant = CalculateDeterminant(matrix);
+    if (determinant != 0)
+    {
+        CalculateMatrixOfMinors(matrix, matrixOfMinors, g_linesCounter);
+        CalculateCofactorMatrix(matrixOfMinors);
+        CalculateTransposeCofactorMatrix(matrixOfMinors, transposeCofactorMatrix);
+        MultiplyMatrixByDeterminant(transposeCofactorMatrix, determinant);
+        OutputResult(transposeCofactorMatrix);
+    }
+    else
+    {
+        cout << "Impossible to create reverse matrix, determinant == 0" << endl;
+        return -1;
+    }
 
-    fclose(data.matrixFile);
     return 0;
 }
