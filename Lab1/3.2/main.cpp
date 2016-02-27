@@ -42,7 +42,7 @@ double CalculateDeterminant(double matrix[AMOUNT_LINES][AMOUNT_COLUMN])
 }
 
 void CalculateMatrixOfMinors(double matrix[AMOUNT_LINES][AMOUNT_COLUMN],
-                             double (&matrixOfMinors)[AMOUNT_LINES][AMOUNT_COLUMN], size_t &g_linesCounter)
+                             double (&matrixOfMinors)[AMOUNT_LINES][AMOUNT_COLUMN], size_t g_linesCounter)
 {
     for (size_t i = 0; i < AMOUNT_COLUMN; ++i)
     {
