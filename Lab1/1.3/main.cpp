@@ -9,7 +9,7 @@ vector<int> FindText(ifstream &inputFile, string &inputString)
     int lineCounter = 1;
     string str;
     vector<int> numbersOfStrings;
-    while (getline(inputFile, *&str) != NULL)
+    while (getline(inputFile, str) != NULL)
     {
         if (str.find(inputString) != string::npos)
         {
