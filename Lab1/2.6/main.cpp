@@ -5,7 +5,7 @@
 
 using namespace std;
 
-bool IsNotCorrectArguments(char numb)
+bool IsNotCorrectArguments(const char &numb)
 {
     return !isdigit(numb);
 }
