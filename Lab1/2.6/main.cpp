@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 {
     if (argc != 4)
     {
-        printf("\nNumber parameters is wrong");
+        cout << "Number parameters is wrong" << endl;
         return -1;
     }
     char *numb = argv[1];
