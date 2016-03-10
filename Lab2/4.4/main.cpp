@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     std::set<int>::iterator iter;
     for (iter = result.begin(); iter != result.end(); ++iter)
     {
-        std::cout << *iter << '\n';
+        printf("%d\n", *iter);
     }
     return 0;
 }
