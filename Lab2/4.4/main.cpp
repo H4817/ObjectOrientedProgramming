@@ -31,8 +31,7 @@ int main(int argc, char *argv[])
     std::set<int> result = GeneratePrimeNumbersSet(atoi(argv[1]));
     std::set<int>::iterator iter;
     for (iter = result.begin(); iter != result.end(); ++iter)
-    {
         printf("%d\n", *iter);
-    }
+    
     return 0;
 }
