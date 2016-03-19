@@ -20,7 +20,6 @@ void WriteInFile(string dict)
         {
             ofs << changes[i] << '\n';
         }
-
     }
 }
 
@@ -44,17 +43,19 @@ void AppendChanges(bool isFileExist = 0, string dict = "dictionary.txt", string 
             cin >> str;
             if (str == "...")
             {
-                cout << "Save the file? (Y/N) ";
-                cin >> str;
-                if (str == "Y" || str == "y")
-                    WriteInFile(dict);
+                if (changes.size() != 0)
+                {
+                    cout << "Save the file? (Y/N) ";
+                    cin >> str;
+                    if (str == "Y" || str == "y")
+                        WriteInFile(dict);
+                }
                 break;
             }
             changes.push_back(str);
         }
     }
 }
-
 
 bool IsWordInDictionary(string dict, string word)
 {
@@ -65,14 +66,15 @@ bool IsWordInDictionary(string dict, string word)
         cout << "Error, cant open file: " << dict << "\n";
         return 1;
     }
-    int lengthOfWord = word.length();
+    int lengthOfWord = static_cast<int> (word.length());
     for (string str; getline(ifs, str);)
     {
         for (int i = 0; i < str.length(); ++i)
         {
-            if (str.substr(i, lengthOfWord) == word)
+            if (str.substr(static_cast<unsigned long> (i), static_cast<unsigned long> (lengthOfWord)) == word)
             {
-                cout << str.substr(i + lengthOfWord, str.length() - (i + lengthOfWord)) << endl;
+                cout << str.substr(static_cast<unsigned long>(i + lengthOfWord), str.length() - (i + lengthOfWord)) <<
+                endl;
                 return true;
             }
         }
@@ -103,10 +105,14 @@ int MakeTranslate(string dict)
             AppendChanges(1, dict, str);
         }
     }
-    cout << "Save the file? (Y/N) " << endl;
-    cin >> str;
-    if (str == "Y" || str == "y")
-        WriteInFile(dict);
+    if (changes.size() != 0)
+    {
+        cout << "Save the file? (Y/N) " << endl;
+        cin >> str;
+        if (str == "Y" || str == "y")
+            WriteInFile(dict);
+    }
+
     ifs.close();
     return 0;
 }
