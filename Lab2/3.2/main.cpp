@@ -4,9 +4,7 @@
 
 using namespace std;
 
-vector<string> changes;
-
-void WriteInFile(string dict)
+void WriteInFile(string dict, const vector <string> & changes)
 {
     ofstream ofs;
     ofs.open(dict, ios_base::app);
@@ -23,7 +21,7 @@ void WriteInFile(string dict)
     }
 }
 
-void AppendChanges(bool isFileExist = 0, string dict = "dictionary.txt", string word = "")
+void AppendChanges(vector <string> & changes, bool isFileExist = 0, string dict = "dictionary.txt", string word = "")
 {
     string str;
     if (isFileExist)
@@ -48,7 +46,7 @@ void AppendChanges(bool isFileExist = 0, string dict = "dictionary.txt", string 
                     cout << "Save the file? (Y/N) ";
                     cin >> str;
                     if (str == "Y" || str == "y")
-                        WriteInFile(dict);
+                        WriteInFile(dict, changes);
                 }
                 break;
             }
@@ -82,7 +80,7 @@ bool IsWordInDictionary(string dict, string word)
     return false;
 }
 
-int MakeTranslate(string dict)
+int MakeTranslate(string dict, vector <string> & changes)
 {
     ifstream ifs;
     ifs.open(dict);
@@ -102,7 +100,7 @@ int MakeTranslate(string dict)
         }
         if (!IsWordInDictionary(dict, str))
         {
-            AppendChanges(1, dict, str);
+            AppendChanges(changes, 1, dict, str);
         }
     }
     if (changes.size() != 0)
@@ -110,7 +108,7 @@ int MakeTranslate(string dict)
         cout << "Save the file? (Y/N) " << endl;
         cin >> str;
         if (str == "Y" || str == "y")
-            WriteInFile(dict);
+            WriteInFile(dict, changes);
     }
 
     ifs.close();
@@ -119,14 +117,15 @@ int MakeTranslate(string dict)
 
 int main(int argc, char *argv[])
 {
+    vector<string> changes;
     if (argc != 2)
     {
         cout << "You forgot to pass some name of dictionary into the command line" << endl;
-        AppendChanges();
+        AppendChanges(changes);
     }
     else
     {
-        MakeTranslate(argv[1]);
+        MakeTranslate(argv[1], changes);
     }
 
     return 0;
