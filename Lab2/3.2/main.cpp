@@ -1,10 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <map>
 
 using namespace std;
 
-void WriteInFile(string dict, const vector <string> & changes)
+void WriteToFile(const string &dict, const vector<string> &changes)
 {
     ofstream ofs;
     ofs.open(dict, ios_base::app);
@@ -12,7 +13,7 @@ void WriteInFile(string dict, const vector <string> & changes)
     {
         if (i % 2 == 0)
         {
-            ofs << changes[i] << " ";
+            ofs << changes[i] << "-";
         }
         else
         {
@@ -21,7 +22,8 @@ void WriteInFile(string dict, const vector <string> & changes)
     }
 }
 
-void AppendChanges(vector <string> & changes, bool isFileExist = 0, string dict = "dictionary.txt", string word = "")
+void AppendChanges(vector<string> &changes, bool isFileExist = 0, string dict = "dictionary.txt",
+                   string word = "")
 {
     string str;
     if (isFileExist)
@@ -35,7 +37,7 @@ void AppendChanges(vector <string> & changes, bool isFileExist = 0, string dict 
     }
     else
     {
-        for (int i = 1; ; ++i)
+        for (; ;)
         {
             cout << "Input any word and his translate: " << endl;
             cin >> str;
@@ -46,7 +48,7 @@ void AppendChanges(vector <string> & changes, bool isFileExist = 0, string dict 
                     cout << "Save the file? (Y/N) ";
                     cin >> str;
                     if (str == "Y" || str == "y")
-                        WriteInFile(dict, changes);
+                        WriteToFile(dict, changes);
                 }
                 break;
             }
@@ -55,38 +57,47 @@ void AppendChanges(vector <string> & changes, bool isFileExist = 0, string dict 
     }
 }
 
-bool IsWordInDictionary(string dict, string word)
+bool IsWordInDictionary(const map<string, string> &dict, const string &word)
 {
-    ifstream ifs;
-    ifs.open(dict);
-    if (!ifs.is_open())
+    bool isWordFound = false;
+    auto position = dict.find(word);
+    if (position != dict.end())
     {
-        cout << "Error, cant open file: " << dict << "\n";
-        return 1;
+        cout << position->second << endl;
+        isWordFound = true;
     }
-    int lengthOfWord = static_cast<int> (word.length());
-    for (string str; getline(ifs, str);)
-    {
-        for (int i = 0; i < str.length(); ++i)
-        {
-            if (str.substr(static_cast<unsigned long> (i), static_cast<unsigned long> (lengthOfWord)) == word)
-            {
-                cout << str.substr(static_cast<unsigned long>(i + lengthOfWord), str.length() - (i + lengthOfWord)) <<
-                endl;
-                return true;
-            }
-        }
-    }
-    return false;
+    return isWordFound;
 }
 
-int MakeTranslate(string dict, vector <string> & changes)
+
+map<string, string> CreateNewAssociatedArray(const string &dict)
 {
     ifstream ifs;
-    ifs.open(dict);
+    ifs.open(dict, ios_base::in);
+    map<string, string> mapDictionary;
     if (!ifs.is_open())
     {
         cout << "Error, cant open file: " << dict << "\n";
+    }
+    else
+    {
+        size_t separatorPos;
+        string buf;
+        while (getline(ifs, buf))
+        {
+            separatorPos = buf.find_first_of("-");
+            mapDictionary.emplace(buf.substr(0, separatorPos), buf.substr(separatorPos + 1, buf.size()));
+        }
+    }
+    return mapDictionary;
+}
+
+int MakeTranslate(const string &dict, vector<string> &changes)
+{
+    map<string, string> dictMap = CreateNewAssociatedArray(dict);
+    if (dictMap.size() == 0)
+    {
+        cout << "Error, input is wrong. Correct format: word-translate" << '\n';
         return 1;
     }
     string str;
@@ -98,7 +109,7 @@ int MakeTranslate(string dict, vector <string> & changes)
         {
             break;
         }
-        if (!IsWordInDictionary(dict, str))
+        if (!IsWordInDictionary(dictMap, str))
         {
             AppendChanges(changes, 1, dict, str);
         }
@@ -107,11 +118,8 @@ int MakeTranslate(string dict, vector <string> & changes)
     {
         cout << "Save the file? (Y/N) " << endl;
         cin >> str;
-        if (str == "Y" || str == "y")
-            WriteInFile(dict, changes);
+        if (str == "Y" || str == "y") WriteToFile(dict, changes);
     }
-
-    ifs.close();
     return 0;
 }
 
@@ -127,6 +135,6 @@ int main(int argc, char *argv[])
     {
         MakeTranslate(argv[1], changes);
     }
-
     return 0;
+
 }
