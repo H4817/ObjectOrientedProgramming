@@ -1,0 +1,4 @@
+var b
+var a
+print b
+printvars
