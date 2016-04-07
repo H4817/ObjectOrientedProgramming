@@ -39,13 +39,27 @@ bool CCalculator::SeparateInstructions()
         if (str == "var")
         {
             sStream >> str;
-            variables.insert(pair<string, string>(str, "nan"));
+            CreateNewVariable(str);
         }
         else if (str == "let")
         {
+            sStream >> str;
+            auto position = str.find(
+                    "=");
+            if (position != string::npos)
+            {
+                Let(str.substr(0, position), str.substr(position + 1, str.size() - position));
+            }
         }
         else if (str == "fn")
         {
+            sStream >> str;
+            auto position = str.find(
+                    "=");
+            if (position != string::npos)
+            {
+                Fn(str.substr(0, position), str.substr(position + 1, str.size() - position));
+            }
         }
         else if (str == "print")
         {
@@ -67,18 +81,61 @@ bool CCalculator::SeparateInstructions()
     return true;
 }
 
-void CCalculator::ProcessInputData()
+void CCalculator::CreateNewVariable(const string &identifier, const string &value)
 {
+    variables.insert(pair<string, string>(identifier, value));
+}
 
+void CCalculator::Let(string identifier, string value)
+{
+    auto position = variables.find(identifier);
+    if (position == variables.end())
+    {
+        variables.insert(pair<string, string>(identifier, value));
+    }
+    else
+    {
+        if (!isdigit(value[0]) && value[0] != '-')
+        {
+            auto pos = variables.find(value);
+            if (pos != variables.end())
+            {
+                position->second = pos->second;
+            }
+        }
+        else
+        {
+            position->second = value;
+        }
+    }
+}
+
+void CCalculator::Fn(const string &identifier, const string &value1, const string &sign, const string &value2)
+{
+    if (sign != "" && value2 != "")
+    {
+        functions.insert(pair<string, string>(identifier, value2));
+    }
+    else
+    {
+        auto pos = variables.find(value1);
+        if (pos != variables.end())
+        {
+            functions.insert(pair<string, string>(identifier, pos->second));
+        }
+        pos = functions.find(value1);
+        if (pos != functions.end())
+        {
+            functions.insert(pair<string, string>(identifier, pos->second));
+        }
+    }
 }
 
 void CCalculator::Print(string identifier)
 {
     auto position = variables.find(identifier);
-    if (position != variables.end())
-    {
-        cout << setprecision(2) << position->second << endl;
-    }
+    (position != variables.end()) ? cout << setprecision(2) << position->second << endl : cout << "Not found: " <<
+                                                                                          identifier << endl;
 }
 
 void CCalculator::PrintVars()
@@ -89,7 +146,4 @@ void CCalculator::PrintVars()
     }
 }
 
-void CCalculator::PrintFunctions()
-{
 
-}

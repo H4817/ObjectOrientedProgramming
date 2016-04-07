@@ -13,6 +13,7 @@ BOOST_AUTO_TEST_SUITE(CCalculator_tests)
         BOOST_CHECK(calculator.ReadFromFile("inputIsEmpty.txt"));
         BOOST_CHECK(calculator.ReadFromFile("input.txt"));
     }
+
     BOOST_AUTO_TEST_CASE(SeparateInstructions)
     {
         BOOST_CHECK(calculator.SeparateInstructions());

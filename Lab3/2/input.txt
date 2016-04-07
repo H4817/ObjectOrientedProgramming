@@ -1,4 +1,6 @@
 var b
 var a
-print b
+let a=4
+let b=a
+print c
 printvars
