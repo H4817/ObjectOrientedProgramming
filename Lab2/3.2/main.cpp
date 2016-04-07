@@ -1,12 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <map>
 
 using namespace std;
 
-vector<string> changes;
-
-void WriteInFile(string dict)
+void WriteToFile(const string &dict, const vector<string> &changes)
 {
     ofstream ofs;
     ofs.open(dict, ios_base::app);
@@ -14,17 +13,17 @@ void WriteInFile(string dict)
     {
         if (i % 2 == 0)
         {
-            ofs << changes[i] << " ";
+            ofs << changes[i] << "-";
         }
         else
         {
             ofs << changes[i] << '\n';
         }
-
     }
 }
 
-void AppendChanges(bool isFileExist = 0, string dict = "dictionary.txt", string word = "")
+void AppendChanges(vector<string> &changes, bool isFileExist = 0, string dict = "dictionary.txt",
+                   string word = "")
 {
     string str;
     if (isFileExist)
@@ -38,16 +37,19 @@ void AppendChanges(bool isFileExist = 0, string dict = "dictionary.txt", string 
     }
     else
     {
-        for (int i = 1; ; ++i)
+        for (; ;)
         {
             cout << "Input any word and his translate: " << endl;
             cin >> str;
             if (str == "...")
             {
-                cout << "Save the file? (Y/N) ";
-                cin >> str;
-                if (str == "Y" || str == "y")
-                    WriteInFile(dict);
+                if (changes.size() != 0)
+                {
+                    cout << "Save the file? (Y/N) ";
+                    cin >> str;
+                    if (str == "Y" || str == "y")
+                        WriteToFile(dict, changes);
+                }
                 break;
             }
             changes.push_back(str);
@@ -55,38 +57,47 @@ void AppendChanges(bool isFileExist = 0, string dict = "dictionary.txt", string 
     }
 }
 
-
-bool IsWordInDictionary(string dict, string word)
+bool IsWordInDictionary(const map<string, string> &dict, const string &word)
 {
-    ifstream ifs;
-    ifs.open(dict);
-    if (!ifs.is_open())
+    bool isWordFound = false;
+    auto position = dict.find(word);
+    if (position != dict.end())
     {
-        cout << "Error, cant open file: " << dict << "\n";
-        return 1;
+        cout << position->second << endl;
+        isWordFound = true;
     }
-    int lengthOfWord = word.length();
-    for (string str; getline(ifs, str);)
-    {
-        for (int i = 0; i < str.length(); ++i)
-        {
-            if (str.substr(i, lengthOfWord) == word)
-            {
-                cout << str.substr(i + lengthOfWord, str.length() - (i + lengthOfWord)) << endl;
-                return true;
-            }
-        }
-    }
-    return false;
+    return isWordFound;
 }
 
-int MakeTranslate(string dict)
+
+map<string, string> CreateNewAssociatedArray(const string &dict)
 {
     ifstream ifs;
-    ifs.open(dict);
+    ifs.open(dict, ios_base::in);
+    map<string, string> mapDictionary;
     if (!ifs.is_open())
     {
         cout << "Error, cant open file: " << dict << "\n";
+    }
+    else
+    {
+        size_t separatorPos;
+        string buf;
+        while (getline(ifs, buf))
+        {
+            separatorPos = buf.find_first_of("-");
+            mapDictionary.emplace(buf.substr(0, separatorPos), buf.substr(separatorPos + 1, buf.size()));
+        }
+    }
+    return mapDictionary;
+}
+
+int MakeTranslate(const string &dict, vector<string> &changes)
+{
+    map<string, string> dictMap = CreateNewAssociatedArray(dict);
+    if (dictMap.size() == 0)
+    {
+        cout << "Error, input is wrong. Correct format: word-translate" << '\n';
         return 1;
     }
     string str;
@@ -98,30 +109,32 @@ int MakeTranslate(string dict)
         {
             break;
         }
-        if (!IsWordInDictionary(dict, str))
+        if (!IsWordInDictionary(dictMap, str))
         {
-            AppendChanges(1, dict, str);
+            AppendChanges(changes, 1, dict, str);
         }
     }
-    cout << "Save the file? (Y/N) " << endl;
-    cin >> str;
-    if (str == "Y" || str == "y")
-        WriteInFile(dict);
-    ifs.close();
+    if (changes.size() != 0)
+    {
+        cout << "Save the file? (Y/N) " << endl;
+        cin >> str;
+        if (str == "Y" || str == "y") WriteToFile(dict, changes);
+    }
     return 0;
 }
 
 int main(int argc, char *argv[])
 {
+    vector<string> changes;
     if (argc != 2)
     {
         cout << "You forgot to pass some name of dictionary into the command line" << endl;
-        AppendChanges();
+        AppendChanges(changes);
     }
     else
     {
-        MakeTranslate(argv[1]);
+        MakeTranslate(argv[1], changes);
     }
-
     return 0;
+
 }
