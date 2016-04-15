@@ -67,4 +67,6 @@ BOOST_AUTO_TEST_SUITE(CCalculator_tests)
         BOOST_CHECK(car.TurnOffEngine());
     }
 
+
+
 BOOST_AUTO_TEST_SUITE_END()
