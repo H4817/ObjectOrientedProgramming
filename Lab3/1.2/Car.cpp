@@ -1,11 +1,10 @@
 #include "Car.h"
 
+using namespace std;
+
 CCar::CCar()
         : m_gears(ZERO), m_speed(0), m_engineIsOn(false), m_direction(HOLD)
 {
-    /*m_gearEdges = {
-            {-1, {0, -20}}, {1, {0, 30}, {2, {20, 50}}, {3, {30, 60}}, {4, {40, 90}}, {5, {50, 150}}}
-    };*/
     m_gearEdges.insert(std::make_pair(-1, std::make_pair(-20, 0)));
     m_gearEdges.insert(
             std::make_pair(0, std::make_pair(std::numeric_limits<int>::min(), std::numeric_limits<int>::max())));
@@ -114,23 +113,22 @@ bool CCar::TurnOffEngine()
     }
 }
 
-int CCar::GetGear()
+int CCar::GetGear() const
 {
     return m_gears;
 }
 
-int CCar::GetSpeed()
+int CCar::GetSpeed() const
 {
     return m_speed;
 }
 
-bool CCar::IsEngineOn()
+bool CCar::IsEngineOn() const
 {
     return m_engineIsOn;
 }
 
-int CCar::GetDirection()
+int CCar::GetDirection() const
 {
     return m_direction;
 }
-
