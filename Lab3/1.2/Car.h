@@ -7,6 +7,8 @@
 
 using namespace std;
 
+typedef pair <int, int> SpeedEdges;
+
 class CCar
 {
 public:
@@ -20,15 +22,35 @@ public:
 
     bool SetSpeed(int speed);
 
-    void GetInfo();
+    int GetGear();
+
+    int GetSpeed();
+
+    bool IsEngineOn();
+
+    int GetDirection(); //TODO: Const
 
 private:
-    size_t m_gear;
-    size_t m_speed;
+    // coding style violaton
+    enum Gears : int
+    {
+        FIRST_NEGATIVE = -1,
+        ZERO,
+        FIRST,
+        SECOND,
+        THIRD,
+        FOURTH,
+        FIFTH
+    };
+    Gears m_gears;
+    int m_speed;
     bool m_engineIsOn;
-    enum direction {forward, backward, hold};
-    direction m_direction;
-    map <int, pair<int, int>> m_gearEdges;
+    enum Direction
+    {
+        FORWARD, BACKWARD, HOLD
+    };
+    Direction m_direction;
+    map <int, SpeedEdges> m_gearEdges;
 };
 
 

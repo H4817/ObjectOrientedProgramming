@@ -1,11 +1,12 @@
 #include "Calculator.h"
 
 CCalculator::CCalculator()
+        : m_operators({"+", "-", "*", "/"})
 {
 
 }
 
-bool CCalculator::ReadFromFile(string nameOfFile)
+bool CCalculator::ReadFromFile(const string &nameOfFile)
 {
     ifstream ifs(nameOfFile);
     if (!ifs.is_open())
@@ -18,9 +19,9 @@ bool CCalculator::ReadFromFile(string nameOfFile)
         string str;
         while (getline(ifs, str))
         {
-            input.push_back(str);
+            m_input.push_back(str);
         }
-        if (input.size() == 0)
+        if (m_input.size() == 0)
         {
             cout << "Error, the input file is empty " << endl;
             return false;
@@ -32,9 +33,9 @@ bool CCalculator::ReadFromFile(string nameOfFile)
 bool CCalculator::SeparateInstructions()
 {
     string str;
-    for (int i = 0; i < input.size(); ++i)
+    for (int i = 0; i < m_input.size(); ++i)
     {
-        stringstream sStream(input[i]);
+        stringstream sStream(m_input[i]);
         sStream >> str;
         if (str == "var")
         {
@@ -48,7 +49,7 @@ bool CCalculator::SeparateInstructions()
                     "=");
             if (position != string::npos)
             {
-                Let(str.substr(0, position), str.substr(position + 1, str.size() - position));
+                DoLet(str.substr(0, position), str.substr(position + 1, str.size() - position));
             }
         }
         else if (str == "fn")
@@ -58,7 +59,17 @@ bool CCalculator::SeparateInstructions()
                     "=");
             if (position != string::npos)
             {
-                Fn(str.substr(0, position), str.substr(position + 1, str.size() - position));
+                string subStr = str.substr(position + 1, str.size() - position);
+                for (size_t i = 0; i < m_operators.size(); ++i)
+                {
+                    auto pos = subStr.find(m_operators[i]);
+                    if (pos != string::npos)
+                    {
+                        Fn(str.substr(0, position), str.substr(position + 1, pos), subStr.substr(pos, 1),
+                           subStr.substr(pos + 1, subStr.length() - pos));
+                        break;
+                    }
+                }
             }
         }
         else if (str == "print")
@@ -72,6 +83,7 @@ bool CCalculator::SeparateInstructions()
         }
         else if (str == "printfns")
         {
+            PrintFunctions();
         }
         else
         {
@@ -83,22 +95,39 @@ bool CCalculator::SeparateInstructions()
 
 void CCalculator::CreateNewVariable(const string &identifier, const string &value)
 {
-    variables.insert(pair<string, string>(identifier, value));
+    if (!IsIdentifierInVariableList(identifier) && !IsIdentifierInFunctionList(identifier))
+    {
+        m_variables.insert(pair<string, string>(identifier, value));
+    }
+    else
+    {
+        cout << "Error, cant create a new variable. '" << identifier << "' is already exist." << endl;
+    }
 }
 
-void CCalculator::Let(string identifier, string value)
+bool CCalculator::IsIdentifierInVariableList(const string &identifier)
 {
-    auto position = variables.find(identifier);
-    if (position == variables.end())
+    return m_variables.find(identifier) != m_variables.end();
+}
+
+bool CCalculator::IsIdentifierInFunctionList(const string &identifier)
+{
+    return m_functions.find(identifier) != m_functions.end();
+}
+
+void CCalculator::DoLet(const string &identifier, const string &value)
+{
+    auto position = m_variables.find(identifier);
+    if (position == m_variables.end())
     {
-        variables.insert(pair<string, string>(identifier, value));
+        m_variables.insert(pair<string, string>(identifier, value));
     }
     else
     {
         if (!isdigit(value[0]) && value[0] != '-')
         {
-            auto pos = variables.find(value);
-            if (pos != variables.end())
+            auto pos = m_variables.find(value);
+            if (pos != m_variables.end())
             {
                 position->second = pos->second;
             }
@@ -110,40 +139,87 @@ void CCalculator::Let(string identifier, string value)
     }
 }
 
+
 void CCalculator::Fn(const string &identifier, const string &value1, const string &sign, const string &value2)
 {
-    if (sign != "" && value2 != "")
+    std::map<std::string, std::string>::iterator pos1;
+    std::map<std::string, std::string>::iterator pos2;
+    bool isError = false;
+    if (IsIdentifierInVariableList(value1))
     {
-        functions.insert(pair<string, string>(identifier, value2));
+        pos1 = m_variables.find(value1);
+    }
+    else if (IsIdentifierInFunctionList(value1))
+    {
+        pos1 = m_functions.find(value1);
     }
     else
     {
-        auto pos = variables.find(value1);
-        if (pos != variables.end())
+        cout << "value is not found: " << value1 << endl;
+        isError = true;
+    }
+    if (IsIdentifierInVariableList(value2))
+    {
+        pos2 = m_variables.find(value2);
+    }
+    else if (IsIdentifierInFunctionList(value2))
+    {
+        pos2 = m_functions.find(value2);
+    }
+    else
+    {
+        cout << "value is not found: " << value2 << endl;
+        isError = true;
+    }
+    if (!isError)
+    {
+        if (sign == "+")
         {
-            functions.insert(pair<string, string>(identifier, pos->second));
+            m_functions.insert(pair<string, string>(identifier, (to_string(
+                    atof(pos1->second.c_str()) + atof(pos2->second.c_str())))));
         }
-        pos = functions.find(value1);
-        if (pos != functions.end())
+        else if (sign == "-")
         {
-            functions.insert(pair<string, string>(identifier, pos->second));
+            m_functions.insert(pair<string, string>(identifier, (to_string(
+                    atof(pos1->second.c_str()) - atof(pos2->second.c_str())))));
         }
+        else if (sign == "*")
+        {
+            m_functions.insert(pair<string, string>(identifier, (to_string(
+                    atof(pos1->second.c_str()) * atof(pos2->second.c_str())))));
+        }
+        else if (sign == "/")
+        {
+            m_functions.insert(pair<string, string>(identifier, (to_string(
+                    atof(pos1->second.c_str()) / atof(pos2->second.c_str())))));
+        }
+    }
+    else
+    {
+        m_functions.insert(pair<string, string>(identifier, "nan"));
     }
 }
 
-void CCalculator::Print(string identifier)
+void CCalculator::Print(const string &identifier)
 {
-    auto position = variables.find(identifier);
-    (position != variables.end()) ? cout << setprecision(2) << position->second << endl : cout << "Not found: " <<
-                                                                                          identifier << endl;
+    auto position = m_variables.find(identifier);
+    (position != m_variables.end()) ? cout << setprecision(2) << position->second << endl : cout << "Not found: " <<
+                                                                                            identifier << endl;
 }
 
 void CCalculator::PrintVars()
 {
-    for (auto it = variables.begin(); it != variables.end(); ++it)
+    for (auto it = m_variables.begin(); it != m_variables.end(); ++it)
     {
+        cout.setf(std::ios_base::fixed, std::ios_base::floatfield);
         cout << it->first << ":" << setprecision(2) << it->second << endl;
     }
 }
 
-
+void CCalculator::PrintFunctions()
+{
+    for (auto it = m_functions.begin(); it != m_functions.end(); ++it)
+    {
+        cout << it->first << ":" << setprecision(2) << atof(it->second.c_str()) << endl;
+    }
+}

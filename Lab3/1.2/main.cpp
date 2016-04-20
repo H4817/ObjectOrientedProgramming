@@ -1,12 +1,33 @@
 #include <iostream>
 #include "Car.h"
-
 using namespace std;
 
 
 void Info(CCar & car)
 {
-    car.GetInfo();
+    if(car.IsEngineOn())
+    {
+        cout << "Engine is on\n";
+    }
+    else
+    {
+        cout << "Engine is off\n";
+    }
+    int direction = car.GetDirection();
+    if (direction == 0)
+    {
+        cout << "Direction is FORWARD\n";
+    }
+    else if (direction == 1)
+    {
+        cout << "Direction is BACKWARD\n";
+    }
+    else
+    {
+        cout << "Car is stopped\n";
+    }
+    cout << "Speed: " << car.GetSpeed() << endl;
+    cout << "Gear: " << car.GetGear() << endl;
 }
 
 bool EngineOn(CCar & car)
@@ -31,33 +52,39 @@ bool SetSpeed(CCar & car, const int & speed)
 
 void WorkWithUser(CCar & car)
 {
-    string str;
-    cout << "Type some commands or press q for exit: " << endl;
-    while (str != "q")
+    cout << "Type some commands or press q for exit" << endl;
+    for (; ;)
     {
-        cout << "> " << endl;
-        cin >> str;
-        if (str == "Info")
+        cout << "> ";
+        string command;
+        int value;
+        cin >> command ;
+        if (command == "q")
+        {
+            break;
+        }
+        if (command == "Info")
         {
             Info(car);
         }
-        else if (str == "EngineOn")
+        else if (command == "EngineOn")
         {
             EngineOn(car);
         }
-        else if (str == "EngineOff")
+        else if (command == "EngineOff")
         {
             EngineOff(car);
         }
-        else if (str.substr(0, 7) == "SetGear")
+        else if (command == "SetGear")
         {
-            SetGear(car, stoi(str.substr(7, str.length() - 7)));
+            cin >> value;
+            SetGear(car, value);
         }
-        else if (str.substr(0, 8) == "SetSpeed")
+        else if (command == "SetSpeed")
         {
-            SetGear(car, stoi(str.substr(8, str.length() - 8)));
+            cin >> value;
+            SetSpeed(car, value);
         }
-
     }
 }
 
