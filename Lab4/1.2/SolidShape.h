@@ -9,13 +9,14 @@ struct Color
 	int BB = 0;
 };
 
-class ISolidShape
+class ISolidShape : IShape
 {
 public:
 	ISolidShape();
-    void GetFillColor();
+	void SetBackgroundColor(int RR, int GG, int BB);
+    Color GetBackgroundColor();
 
 private:
-    Color m_fillColor;
+    Color m_backgroundColor;
 };
 

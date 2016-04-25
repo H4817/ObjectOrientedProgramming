@@ -1,13 +1,25 @@
 #pragma once
 
-#include "Shape.h"
+#include "SolidShape.h"
 
-class Circle
+class CCircle : ISolidShape
 {
 public:
-    Circle();
+    CCircle(int x, int y, int radius);
+
+    void SetPerimeter();
+
+    void SetArea();
+
+    double GetPerimeter() override;
+
+    double GetArea() override;
+
+    std::string ToString() const override;
 
 private:
-    int m_radius;
-    pair<int, int> m_center;
+    std::pair<int, int> m_center;
+    double m_radius;
+    double m_perimeter;
+    double m_area;
 };

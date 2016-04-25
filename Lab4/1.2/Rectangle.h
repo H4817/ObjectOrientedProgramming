@@ -1,14 +1,21 @@
 #pragma once
 
-#include "Shape.h"
+#include "SolidShape.h"
 
-class Rectangle
+class Rectangle : ISolidShape
 {
 public:
-    Rectangle();
+    Rectangle(int x, int y, double width, double height);
+    void SetPerimeter();
+    void SetArea();
+    double GetPerimeter() override;
+    double GetArea() override;
+    std::string ToString() const override;
 
 private:
-    pair <int, int> m_pointCoordinates;
-    int m_width;
-    int m_hight;
+    std::pair <int, int> m_coordinatesOfPoint;
+    double m_width;
+    double m_height;
+    double m_perimeter;
+    double m_area;
 };

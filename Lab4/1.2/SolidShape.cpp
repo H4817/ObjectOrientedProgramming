@@ -1,11 +1,14 @@
 #include "SolidShape.h"
 
 ISolidShape::ISolidShape()
-{
+{ }
 
+void ISolidShape::SetBackgroundColor(int RR, int GG, int BB)
+{
+    m_backgroundColor = {RR, GG, BB};
 }
 
-void ISolidShape::GetFillColor()
+Color ISolidShape::GetBackgroundColor()
 {
-
+    return m_backgroundColor;
 }

@@ -5,12 +5,12 @@ IShape::IShape()
 
 }
 
-void IShape::GetArea()
+double IShape::GetArea()
 {
 
 }
 
-void IShape::GetPerimeter()
+double IShape::GetPerimeter()
 {
 
 }
@@ -20,7 +20,7 @@ void IShape::GetLineColor()
 
 }
 
-string IShape::ToString() const
+std::string IShape::ToString() const
 {
 
 }

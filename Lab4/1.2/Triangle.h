@@ -1,15 +1,25 @@
 #pragma once
 
-#include "Shape.h"
+#include "SolidShape.h"
 
-class Triangle
+class Triangle : ISolidShape
 {
 public:
-    Triangle();
+    Triangle(int x1, int y1, int x2, int y2, int x3, int y3);
+    void SetPerimeter();
+    void SetArea();
+    double GetPerimeter() override;
+    double GetArea() override;
+    std::string ToString() const override;
+    void SetLengthOfSides();
+    std::tuple <double, double, double> GetLengthOfSides() const;
 
 private:
-    pair <int, int> m_firstPoint;
-    pair <int, int> m_secondPoint;
-    pair <int, int> m_thirdPoint;
+    std::pair <int, int> m_firstPoint;
+    std::pair <int, int> m_secondPoint;
+    std::pair <int, int> m_thirdPoint;
+    std::tuple <double, double, double> m_lengthOfSides;
+    double m_perimeter;
+    double m_area;
 };
 

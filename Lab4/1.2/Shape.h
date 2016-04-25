@@ -2,16 +2,14 @@
 
 #include <iostream>
 
-using namespace std;
-
 class IShape
 {
 public:
     IShape();
-    virtual void GetPerimeter() = 0;
-    virtual void GetArea() = 0;
+    virtual double GetPerimeter() = 0;
+    virtual double GetArea() = 0;
     void GetLineColor();
-    virtual string ToString() const = 0;
+    virtual std::string ToString() const = 0;
 };
 
 
