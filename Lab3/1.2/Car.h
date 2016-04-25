@@ -5,9 +5,8 @@
 #include <map>
 #include <limits>
 
-using namespace std;
 
-typedef pair <int, int> SpeedEdges;
+typedef std::pair<int, int> SpeedEdges;
 
 class CCar
 {
@@ -22,16 +21,15 @@ public:
 
     bool SetSpeed(int speed);
 
-    int GetGear();
+    int GetGear() const;
 
-    int GetSpeed();
+    int GetSpeed() const;
 
-    bool IsEngineOn();
+    bool IsEngineOn() const;
 
-    int GetDirection(); //TODO: Const
+    int GetDirection() const;
 
 private:
-    // coding style violaton
     enum Gears : int
     {
         FIRST_NEGATIVE = -1,
@@ -50,7 +48,5 @@ private:
         FORWARD, BACKWARD, HOLD
     };
     Direction m_direction;
-    map <int, SpeedEdges> m_gearEdges;
+    std::map<int, SpeedEdges> m_gearEdges;
 };
-
-
