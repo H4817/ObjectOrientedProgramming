@@ -2,8 +2,7 @@
 #include "Car.h"
 using namespace std;
 
-
-void Info(CCar & car)
+void Info(const CCar & car)
 {
     if(car.IsEngineOn())
     {

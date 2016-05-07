@@ -5,14 +5,7 @@ using namespace std;
 CCar::CCar()
         : m_gears(ZERO), m_speed(0), m_engineIsOn(false), m_direction(HOLD)
 {
-    m_gearEdges.insert(std::make_pair(-1, std::make_pair(-20, 0)));
-    m_gearEdges.insert(
-            std::make_pair(0, std::make_pair(std::numeric_limits<int>::min(), std::numeric_limits<int>::max())));
-    m_gearEdges.insert(std::make_pair(1, std::make_pair(0, 30)));
-    m_gearEdges.insert(std::make_pair(2, std::make_pair(20, 50)));
-    m_gearEdges.insert(std::make_pair(3, std::make_pair(30, 60)));
-    m_gearEdges.insert(std::make_pair(4, std::make_pair(40, 90)));
-    m_gearEdges.insert(std::make_pair(5, std::make_pair(50, 150)));
+
 }
 
 bool CCar::TurnOnEngine()
@@ -32,8 +25,8 @@ bool CCar::SetGear(int gear)
 {
     if (m_engineIsOn)
     {
-        auto pos = m_gearEdges.find(gear);
-        if (pos != m_gearEdges.end() && m_speed >= pos->second.first &&
+        auto pos = CarDefinitions::GEAR_EDGES.find(gear);
+        if (pos != CarDefinitions::GEAR_EDGES.end() && m_speed >= pos->second.first &&
             m_speed <= pos->second.second)
         {
             m_gears = static_cast<Gears>(gear);
@@ -67,7 +60,7 @@ bool CCar::SetSpeed(int speed)
 {
     if (m_engineIsOn && m_gears != 0)
     {
-        auto pos = m_gearEdges.find(m_gears);
+        auto pos = CarDefinitions::GEAR_EDGES.find(m_gears);
         if (speed >= pos->second.first && speed <= pos->second.second)
         {
             m_speed = speed;
@@ -132,3 +125,4 @@ int CCar::GetDirection() const
 {
     return m_direction;
 }
+
