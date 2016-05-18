@@ -23,7 +23,8 @@ private:
     void CalculatePerimeter();
 
     void CalculateArea();
-
+    Color m_lineColor;
+    Color m_backgroundColor;
     std::pair<int, int> m_firstPoint;
     std::pair<int, int> m_secondPoint;
     std::pair<int, int> m_thirdPoint;

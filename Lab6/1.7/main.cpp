@@ -36,7 +36,6 @@ void WorkWithUser()
 int main()
 {
     WorkWithUser();
-  //  CHttpUrl cHttpUrl("https://www.test.com:211/image/img.png");
 
     return 0;
 }

@@ -31,17 +31,28 @@ struct CShapesFixture
 
     struct Point
     {
-        std::pair<int, int> coordinates;
-    } point;
+        CPoint point;
+
+        PointFixture()
+                :point(10, 20)
+        {
+
+        }
+    };
 
     struct LineSegment
     {
-        std::pair<int, int> firstPoint;
-        std::pair<int, int> secondPoint;
-    } lineSegment;
+        CLineSegment line;
+
+        LineFixture()
+                : line(CPoint(1, 1), CPoint(3, 3))
+        {
+
+        }
+    };
 };
 
-BOOST_FIXTURE_TEST_SUITE(Car, CCarFixture)
+BOOST_FIXTURE_TEST_SUITE(Shapes, CShapesFixture)
 
     BOOST_AUTO_TEST_CASE()
     {

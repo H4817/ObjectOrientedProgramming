@@ -3,14 +3,12 @@
 ISolidShape::ISolidShape()
 { }
 
-void ISolidShape::SetBackgroundColor(int RR, int GG, int BB)
+Color ISolidShape::GetLineColor() const
 {
-    m_backgroundColor.RR = RR;
-    m_backgroundColor.GG = GG;
-    m_backgroundColor.BB = BB;
+    return m_lineColor;
 }
 
-Color ISolidShape::GetBackgroundColor()
+Color ISolidShape::GetBackgroundColor() const
 {
     return m_backgroundColor;
 }

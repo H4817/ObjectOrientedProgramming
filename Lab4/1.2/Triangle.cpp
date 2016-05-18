@@ -4,12 +4,13 @@ CTriangle::CTriangle(std::pair<int, int> firstPoint, std::pair<int, int> secondP
         : m_firstPoint(firstPoint), m_secondPoint(secondPoint), m_thirdPoint(thirdPoint)
 {
     CalculateLengthsOfSides();
+    CalculatePerimeter();
+    CalculateArea();
 }
 
 void CTriangle::CalculatePerimeter()
 {
     m_perimeter = std::get<0>(m_lengthsOfSides) + std::get<1>(m_lengthsOfSides) + std::get<2>(m_lengthsOfSides);
-    CalculateArea();
 }
 
 void CTriangle::CalculateArea()
@@ -37,7 +38,6 @@ void CTriangle::CalculateLengthsOfSides()
                                                  pow((m_thirdPoint.second - m_secondPoint.second), 2)), std::sqrt(
                     pow((m_firstPoint.first - m_thirdPoint.first), 2) +
                     pow((m_firstPoint.second - m_thirdPoint.second), 2)));
-    CalculatePerimeter();
 }
 
 std::tuple<double, double, double> CTriangle::GetLengthsOfSides() const
@@ -53,6 +53,5 @@ std::string CTriangle::ToString() const
     m_thirdPoint.second << " First side=" << std::get<0>(m_lengthsOfSides) << " Second side=" <<
     std::get<1>(m_lengthsOfSides) << " Third side=" << std::get<2>(m_lengthsOfSides) << " P=" << m_perimeter << " S=" <<
     m_area;
-    std::string str = sStream.str();
-    return str;
+    return sStream.str();
 }

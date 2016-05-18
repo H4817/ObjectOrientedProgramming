@@ -5,10 +5,16 @@
 
 struct Color
 {
-    int RR;
-    int GG;
-    int BB;
-    std::tuple<int, int, int> color;
+	Color() = default;
+	Color(int r, int g, int b)
+		: r(r)
+		, g(g)
+		, b(b)
+	{};
+
+	int r = 0;
+	int g = 0;
+	int b = 0;
 };
 
 class IShape

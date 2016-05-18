@@ -4,15 +4,27 @@
 #include <stdlib.h>
 
 CHttpUrl::CHttpUrl(std::string const &domain, std::string const &document, Protocol protocol, unsigned short port)
-        : m_domain(domain), m_document(document), m_port(port)
 {
+    InitializePartsOfUrl(domain, document, protocol, port);
+}
+
+bool CHttpUrl::IsDomainCorrect(const std::string &domain) const
+{
+    return (domain.find_first_of(" \t") == std::string::npos);
 }
 
 void CHttpUrl::InitializePartsOfUrl(std::string const &domain, std::string const &document, Protocol protocol,
                                     unsigned short port)
 {
     m_domain = domain;
-    m_document = document;
+    if (document != "")
+    {
+        m_document = document;
+    }
+    else
+    {
+        m_document = "/";
+    }
     m_port = port;
     if (protocol == HTTP)
         m_protocol = "http";
@@ -77,7 +89,15 @@ CHttpUrl::CHttpUrl(std::string const &url)
         {
             document = str.substr(positionOfDocument + 1);
         }
-        domain = str.substr(1, positionOfDocument);
+        if (IsDomainCorrect(str.substr(1, positionOfDocument)))
+        {
+            domain = str.substr(1, positionOfDocument);
+        }
+        else
+        {
+            throw CUrlParsingError("Domain can't contain a whitespaces");
+        }
+
         if (protocol == HTTPS)
         {
             port = 443;
@@ -102,7 +122,15 @@ CHttpUrl::CHttpUrl(std::string const &url)
         {
             document = str.substr(positionOfDocument + 1);
         }
-        domain = str.substr(1, portPosition - 1);
+
+        if (IsDomainCorrect(str.substr(1, portPosition - 1)))
+        {
+            domain = str.substr(1, portPosition - 1);
+        }
+        else
+        {
+            throw CUrlParsingError("Domain can't contain a whitespaces");
+        }
         InitializePartsOfUrl(domain, document, protocol, port);
     }
 }

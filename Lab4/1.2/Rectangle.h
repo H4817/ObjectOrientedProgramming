@@ -16,5 +16,5 @@ public:
 
 private:
     std::pair<int, int> m_coordinatesOfPoint;
-    std::pair<int, int> m_widthAndHeight;
+    std::pair<int, int> m_size;
 };

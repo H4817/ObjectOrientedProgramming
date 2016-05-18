@@ -2,14 +2,16 @@
 
 #include "Shape.h"
 
+// Remove implementation details from interface
 class ISolidShape : public IShape
 {
 public:
 	ISolidShape();
-	void SetBackgroundColor(int RR, int GG, int BB);
-    Color GetBackgroundColor();
+    virtual Color GetBackgroundColor()const = 0;
+    virtual Color GetLineColor()const = 0;
 
-private:
+protected:
     Color m_backgroundColor;
+	Color m_lineColor;
 };
 
