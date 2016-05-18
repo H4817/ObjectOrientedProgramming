@@ -13,7 +13,7 @@ class CHttpUrl
 public:
     CHttpUrl(std::string const &url);
 
-     CHttpUrl(
+    CHttpUrl(
             std::string const &domain,
             std::string const &document,
             Protocol protocol = HTTP,
@@ -25,18 +25,25 @@ public:
 
     std::string GetDocument() const;
 
-    Protocol GetProtocol() const;
+    std::string GetProtocol() const;
+
 
     unsigned short GetPort() const;
 
-    bool IsProtocolInUrl(const std::string & protocol, const std::string & url) const;
+    bool IsProtocolInUrl(const std::string &protocol, const std::string &url) const;
 
-    bool IsNumber(const std::string & s);
+    bool IsNumber(const std::string &s);
+
+    void InitializePartsOfUrl(
+            std::string const &domain,
+            std::string const &document,
+            Protocol protocol = HTTP,
+            unsigned short port = 80);
 
 private:
     std::string m_url;
     std::string m_domain;
     std::string m_document;
-    Protocol m_protocol;
+    std::string m_protocol;
     unsigned short m_port;
 };
