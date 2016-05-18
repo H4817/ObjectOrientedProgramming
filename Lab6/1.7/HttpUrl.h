@@ -26,9 +26,25 @@ public:
     std::string GetDocument() const;
 
     std::string GetProtocol() const;
+<<<<<<< HEAD
 
     unsigned short GetPort() const;
 
+=======
+
+
+    unsigned short GetPort() const;
+
+    bool IsProtocolInUrl(const std::string &protocol, const std::string &url) const;
+
+    bool IsNumber(const std::string &s);
+
+    void InitializePartsOfUrl(
+            std::string const &domain,
+            std::string const &document,
+            Protocol protocol = HTTP,
+            unsigned short port = 80);
+>>>>>>> 52b10b1396edbd753d06904d0c21f062e65c2cc4
 
 private:
     void InitializePartsOfUrl(

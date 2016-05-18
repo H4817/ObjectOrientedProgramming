@@ -4,6 +4,12 @@
 #include <stdlib.h>
 
 CHttpUrl::CHttpUrl(std::string const &domain, std::string const &document, Protocol protocol, unsigned short port)
+        : m_domain(domain), m_document(document), m_port(port)
+{
+}
+
+void CHttpUrl::InitializePartsOfUrl(std::string const &domain, std::string const &document, Protocol protocol,
+                                    unsigned short port)
 {
     InitializePartsOfUrl(domain, document, protocol, port);
 }
@@ -17,6 +23,7 @@ void CHttpUrl::InitializePartsOfUrl(std::string const &domain, std::string const
                                     unsigned short port)
 {
     m_domain = domain;
+<<<<<<< HEAD
     if (document != "")
     {
         m_document = document;
@@ -25,6 +32,9 @@ void CHttpUrl::InitializePartsOfUrl(std::string const &domain, std::string const
     {
         m_document = "/";
     }
+=======
+    m_document = document;
+>>>>>>> 52b10b1396edbd753d06904d0c21f062e65c2cc4
     m_port = port;
     if (protocol == HTTP)
         m_protocol = "http";
@@ -89,6 +99,7 @@ CHttpUrl::CHttpUrl(std::string const &url)
         {
             document = str.substr(positionOfDocument + 1);
         }
+<<<<<<< HEAD
         if (IsDomainCorrect(str.substr(1, positionOfDocument)))
         {
             domain = str.substr(1, positionOfDocument);
@@ -98,6 +109,9 @@ CHttpUrl::CHttpUrl(std::string const &url)
             throw CUrlParsingError("Domain can't contain a whitespaces");
         }
 
+=======
+        domain = str.substr(1, positionOfDocument);
+>>>>>>> 52b10b1396edbd753d06904d0c21f062e65c2cc4
         if (protocol == HTTPS)
         {
             port = 443;
@@ -121,6 +135,7 @@ CHttpUrl::CHttpUrl(std::string const &url)
         if (positionOfDocument != std::string::npos)
         {
             document = str.substr(positionOfDocument + 1);
+<<<<<<< HEAD
         }
 
         if (IsDomainCorrect(str.substr(1, portPosition - 1)))
@@ -131,6 +146,10 @@ CHttpUrl::CHttpUrl(std::string const &url)
         {
             throw CUrlParsingError("Domain can't contain a whitespaces");
         }
+=======
+        }
+        domain = str.substr(1, portPosition - 1);
+>>>>>>> 52b10b1396edbd753d06904d0c21f062e65c2cc4
         InitializePartsOfUrl(domain, document, protocol, port);
     }
 }
@@ -159,4 +178,3 @@ std::string CHttpUrl::GetProtocol() const
 {
     return m_protocol;
 }
-
