@@ -2,36 +2,25 @@
 #include <math.h>
 #include <sstream>
 
-CCircle::CCircle(int x, int y, int radius) : m_center(x, y), m_radius(radius)
+CCircle::CCircle(std::pair<int, int> center, int radius) : m_center(center), m_radius(radius)
 {
-    SetPerimeter();
-    SetArea();
 }
 
-void CCircle::SetPerimeter()
+double CCircle::GetPerimeter() const
 {
-    m_perimeter = 2 * M_PI * m_radius;
+    return 2 * M_PI * m_radius;
 }
 
-void CCircle::SetArea()
+double CCircle::GetArea() const
 {
-    m_area = M_PI * pow(m_radius, 2);
-}
-
-double CCircle::GetPerimeter()
-{
-    return m_perimeter;
-}
-
-double CCircle::GetArea()
-{
-    return m_area;
+    return M_PI * pow(m_radius, 2);
 }
 
 std::string CCircle::ToString() const
 {
     std::stringstream sStream;
-    sStream << "x=" << m_center.first << " y=" << m_center.second << " R=" << m_radius << " P=" << m_perimeter << " S=" << m_area;
+    sStream << "Circle" << " x=" << m_center.first << " y=" << m_center.second << " R=" << m_radius << " P=" <<
+    GetPerimeter() << " S=" << GetArea();
     std::string str = sStream.str();
     return str;
 }

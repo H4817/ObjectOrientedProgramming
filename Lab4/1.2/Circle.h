@@ -2,24 +2,18 @@
 
 #include "SolidShape.h"
 
-class CCircle : ISolidShape
+class CCircle : public ISolidShape
 {
 public:
-    CCircle(int x, int y, int radius);
+    CCircle(std::pair<int, int> center, int radius);
 
-    void SetPerimeter();
+    double GetPerimeter() const override;
 
-    void SetArea();
-
-    double GetPerimeter() override;
-
-    double GetArea() override;
+    double GetArea() const override;
 
     std::string ToString() const override;
 
 private:
     std::pair<int, int> m_center;
     double m_radius;
-    double m_perimeter;
-    double m_area;
 };

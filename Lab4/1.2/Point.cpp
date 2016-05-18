@@ -3,22 +3,15 @@
 #include <string>
 
 
-CPoint::CPoint(int x, int y) : m_coordinates(x, y)
-{
+CPoint::CPoint(std::pair<int, int> coordinates) : m_coordinates(coordinates)
+{ }
 
-}
-
-CPoint::CPoint() : m_coordinates(0, 0)
-{
-
-}
-
-double CPoint::GetPerimeter()
+double CPoint::GetPerimeter() const
 {
     return 0;
 }
 
-double CPoint::GetArea()
+double CPoint::GetArea() const
 {
     return 0;
 }
@@ -26,7 +19,8 @@ double CPoint::GetArea()
 std::string CPoint::ToString() const
 {
     std::stringstream sStream;
-    sStream << "x=" << m_coordinates.first << " y=" << m_coordinates.second << " P=0" << " S=0";
+    sStream << "Point" << " x=" << m_coordinates.first << " y=" << m_coordinates.second << " P=" << GetPerimeter() <<
+    " S=" << GetArea();
     std::string str = sStream.str();
     return str;
 }

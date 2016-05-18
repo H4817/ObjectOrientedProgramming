@@ -1,36 +1,27 @@
 #include <sstream>
 #include "Rectangle.h"
 
-Rectangle::Rectangle(int x, int y, double width, double height) : m_coordinatesOfPoint(x, y), m_width(width), m_height(height)
+CRectangle::CRectangle(std::pair<int, int> coordinatesOfPoint, std::pair<int, int> widthAndHeight) : m_coordinatesOfPoint(
+        coordinatesOfPoint), m_widthAndHeight(widthAndHeight)
 {
-    SetPerimeter();
-    SetArea();
 }
 
-void Rectangle::SetPerimeter()
+double CRectangle::GetPerimeter() const
 {
-    m_perimeter = (m_width + m_height) * 2;
+    return (m_widthAndHeight.first + m_widthAndHeight.second) * 2;
 }
 
-void Rectangle::SetArea()
+double CRectangle::GetArea() const
 {
-    m_area = m_width * m_height;
+    return m_widthAndHeight.first * m_widthAndHeight.second;
 }
 
-double Rectangle::GetPerimeter()
-{
-    return m_perimeter;
-}
-
-double Rectangle::GetArea()
-{
-    return m_area;
-}
-
-std::string Rectangle::ToString() const
+std::string CRectangle::ToString() const
 {
     std::stringstream sStream;
-    sStream << "x=" << m_coordinatesOfPoint.first << " y=" << m_coordinatesOfPoint.second << " width=" << m_width << " height=" << m_height << " P=" << m_perimeter << " S=" << m_area;
+    sStream << "Rectangle" << " x=" << m_coordinatesOfPoint.first << " y=" << m_coordinatesOfPoint.second <<
+    " width=" << m_widthAndHeight.first << " height=" << m_widthAndHeight.second << " P=" << GetPerimeter() << " S=" <<
+    GetArea();
     std::string str = sStream.str();
     return str;
 }

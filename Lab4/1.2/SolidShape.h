@@ -2,14 +2,7 @@
 
 #include "Shape.h"
 
-struct Color
-{
-    int RR = 0;
-	int GG = 0;
-	int BB = 0;
-};
-
-class ISolidShape : IShape
+class ISolidShape : public IShape
 {
 public:
 	ISolidShape();

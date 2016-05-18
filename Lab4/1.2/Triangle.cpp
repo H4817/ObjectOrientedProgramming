@@ -1,45 +1,58 @@
-#include <cmath>
-#include <tuple>
 #include "Triangle.h"
 
-Triangle::Triangle(int x1, int y1, int x2, int y2, int x3, int y3) : m_firstPoint(x1, y1), m_secondPoint(x2, y2),
-                                                                     m_thirdPoint(x3, y3)
+CTriangle::CTriangle(std::pair<int, int> firstPoint, std::pair<int, int> secondPoint, std::pair<int, int> thirdPoint)
+        : m_firstPoint(firstPoint), m_secondPoint(secondPoint), m_thirdPoint(thirdPoint)
 {
-    SetPerimeter();
-    SetArea();
+    CalculateLengthsOfSides();
 }
 
-void Triangle::SetPerimeter()
+void CTriangle::CalculatePerimeter()
 {
-    m_perimeter = m_lengthOfSides.first + m_lengthOfSides.second + m_lengthOfSides.third;
+    m_perimeter = std::get<0>(m_lengthsOfSides) + std::get<1>(m_lengthsOfSides) + std::get<2>(m_lengthsOfSides);
+    CalculateArea();
 }
 
-void Triangle::SetArea()
+void CTriangle::CalculateArea()
 {
+    m_area = std::sqrt(abs(m_perimeter / 2 * (m_perimeter / 2 - std::get<0>(m_lengthsOfSides)) *
+                           (m_perimeter / 2 - std::get<1>(m_lengthsOfSides)) *
+                           (m_perimeter / 2 - std::get<2>(m_lengthsOfSides))));
 }
 
-double Triangle::GetPerimeter()
+double CTriangle::GetPerimeter() const
 {
     return m_perimeter;
 }
 
-double Triangle::GetArea()
+double CTriangle::GetArea() const
 {
     return m_area;
 }
 
-void Triangle::SetLengthOfSides()
+void CTriangle::CalculateLengthsOfSides()
 {
-    m_lengthOfSides = std::make_tuple(std::sqrt(
-                                              pow((m_secondPoint.first - m_firstPoint.first), 2) +
-                                              pow((m_secondPoint.second - m_firstPoint.second), 2)),
-                                      std::sqrt(pow((m_thirdPoint.first - m_secondPoint.first), 2) +
-                                                pow((m_thirdPoint.second - m_secondPoint.second), 2)), std::sqrt(
+    m_lengthsOfSides = std::make_tuple(std::sqrt(pow((m_secondPoint.first - m_firstPoint.first), 2) +
+                                                 pow((m_secondPoint.second - m_firstPoint.second), 2)),
+                                       std::sqrt(pow((m_thirdPoint.first - m_secondPoint.first), 2) +
+                                                 pow((m_thirdPoint.second - m_secondPoint.second), 2)), std::sqrt(
                     pow((m_firstPoint.first - m_thirdPoint.first), 2) +
                     pow((m_firstPoint.second - m_thirdPoint.second), 2)));
+    CalculatePerimeter();
 }
 
-std::tuple<double, double, double> Triangle::GetLengthOfSides() const
+std::tuple<double, double, double> CTriangle::GetLengthsOfSides() const
 {
-    return m_lengthOfSides;
+    return m_lengthsOfSides;
+}
+
+std::string CTriangle::ToString() const
+{
+    std::stringstream sStream;
+    sStream << "Triangle" << " x1=" << m_firstPoint.first << " y1=" << m_firstPoint.second << " x2=" <<
+    m_secondPoint.first << " y2=" << m_secondPoint.second << " x3=" << m_thirdPoint.first << " y3=" <<
+    m_thirdPoint.second << " First side=" << std::get<0>(m_lengthsOfSides) << " Second side=" <<
+    std::get<1>(m_lengthsOfSides) << " Third side=" << std::get<2>(m_lengthsOfSides) << " P=" << m_perimeter << " S=" <<
+    m_area;
+    std::string str = sStream.str();
+    return str;
 }

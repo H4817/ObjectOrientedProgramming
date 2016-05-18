@@ -2,17 +2,19 @@
 
 #include "Shape.h"
 
-class CPoint : IShape
+class CPoint : public IShape
 {
 public:
-    CPoint(int x, int y);
-    CPoint();
-    double GetPerimeter() override;
-    double GetArea() override;
+    CPoint(std::pair<int, int> coordinates);
+
+    double GetPerimeter() const override;
+
+    double GetArea() const override;
+
     std::string ToString() const override;
 
 private:
-    std::pair <int, int> m_coordinates;
+    std::pair<int, int> m_coordinates;
 };
 
 

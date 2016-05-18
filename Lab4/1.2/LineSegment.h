@@ -2,18 +2,22 @@
 
 #include "Shape.h"
 
-class LineSegment : IShape
+class CLineSegment : public IShape
 {
 public:
-    LineSegment(int x1, int y1, int x2, int y2);
+    CLineSegment(const std::pair<int, int> & firstPoint, const std::pair<int, int> & secondPoint);
+
     double GetLengthOfLine();
-    double GetPerimeter() override;
-    double GetArea() override;
+
+    double GetPerimeter() const override;
+
+    double GetArea() const override;
+
     std::string ToString() const override;
 
 private:
-    std::pair <int, int> m_firstPoint;
-    std::pair <int, int> m_secondPoint;
+    std::pair<int, int> m_firstPoint;
+    std::pair<int, int> m_secondPoint;
     double m_length;
 };
 
