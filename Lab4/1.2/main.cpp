@@ -14,7 +14,7 @@ using namespace std;
 void PrintSortedByPerimeter(vector<std::shared_ptr<IShape>> &shapes)
 {
     typedef std::shared_ptr <IShape> IShapePtr;
-    std::sort(shapes.begin(), shapes.end(), [](IShapePtr const &shape1, IShapePtr const &shape2) {
+    std::sort(shapes.begin(), shapes.end(), [](std::shared_ptr <IShape> const &shape1, std::shared_ptr <IShape> const &shape2) {
                   return shape1->GetArea() > shape2->GetArea();
     });
     for (auto it : shapes)

@@ -7,8 +7,8 @@ class ISolidShape : public IShape
 {
 public:
 	ISolidShape();
-    virtual Color GetBackgroundColor()const = 0;
-    virtual Color GetLineColor()const = 0;
+    virtual Color GetBackgroundColor()const;
+    virtual Color GetLineColor()const;
 
 protected:
     Color m_backgroundColor;
