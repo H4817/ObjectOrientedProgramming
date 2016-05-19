@@ -12,9 +12,23 @@ CStringStack::CStringStack()
 CStringStack::Node *CStringStack::InitializeNode(std::string str)
 {
     Node *lst;
-    lst = (Node *) malloc(sizeof(Node));
-    lst->data = str;
-    lst->next = NULL;
+    try
+    {
+        if (! (lst = (Node *) malloc(sizeof(Node))) )
+        {
+            throw std::invalid_argument("Out of memory");
+        }
+        else
+        {
+            lst->data = str;
+            lst->next = NULL;
+        }
+    }
+    catch (std::exception const &e)
+    {
+        std::cout << "Error: " << e.what() << std::endl;
+    }
+
     return (lst);
 }
 
