@@ -38,6 +38,7 @@ private:
     bool IsNumber(const std::string &s);
     bool IsProtocolInUrl(const std::string &protocol, const std::string &url) const;
     bool IsDomainCorrect(const std::string & domain) const;
+    bool IsPortCorrect(const int & port) const;
     std::string m_url;
     std::string m_domain;
     std::string m_document;

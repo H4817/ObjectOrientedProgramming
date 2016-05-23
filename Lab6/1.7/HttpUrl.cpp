@@ -26,7 +26,10 @@ void CHttpUrl::InitializePartsOfUrl(std::string const &domain, std::string const
     {
         m_document = "/";
     }
+
     m_port = port;
+
+
     if (protocol == HTTP)
         m_protocol = "http";
     else
@@ -51,6 +54,11 @@ bool CHttpUrl::IsNumber(const std::string &s)
     return !s.empty() && std::find_if(s.begin(),
                                       s.end(), [](char c)
                                       { return !std::isdigit(c); }) == s.end();
+}
+
+bool CHttpUrl::IsPortCorrect(const int &port) const
+{
+    return (port >= 0 && port < 65535);
 }
 
 CHttpUrl::CHttpUrl(std::string const &url)
@@ -115,7 +123,7 @@ CHttpUrl::CHttpUrl(std::string const &url)
         auto positionOfDocument = str.substr(1).find_first_of("/");
         std::string expectedPort = str.substr(portPosition + 1, positionOfDocument - portPosition);
 
-        if (!IsNumber(expectedPort))
+        if (!IsNumber(expectedPort) || !IsPortCorrect((atoi(expectedPort.c_str()))))
         {
             throw CUrlParsingError("Unknown port");
         }
@@ -133,6 +141,8 @@ CHttpUrl::CHttpUrl(std::string const &url)
         {
             throw CUrlParsingError("Domain can't contain a whitespaces");
         }
+
+        InitializePartsOfUrl(domain, document, protocol, port);
     }
 }
 
