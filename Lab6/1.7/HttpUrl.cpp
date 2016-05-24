@@ -20,7 +20,14 @@ void CHttpUrl::InitializePartsOfUrl(std::string const &domain, std::string const
     m_domain = domain;
     if (document != "")
     {
-        m_document = document;
+        if (document[0] != '/')
+        {
+            m_document = "/" + document;
+        }
+        else
+        {
+            m_document = document;
+        }
     }
     else
     {
