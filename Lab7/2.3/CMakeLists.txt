@@ -5,5 +5,5 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 find_package (Boost COMPONENTS unit_test_framework REQUIRED)
 
-set(SOURCE_FILES main.cpp MyList.h)
+set(SOURCE_FILES tests.cpp MyList.h)
 add_executable(2_3 ${SOURCE_FILES})
