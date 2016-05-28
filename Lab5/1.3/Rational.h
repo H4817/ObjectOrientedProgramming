@@ -1,4 +1,3 @@
-
 #pragma once
 
 
@@ -68,7 +67,9 @@ public:
     //	(1/2) - 1     = (-1/2)
     //	1 - (1/2)     = (1/2)
     //////////////////////////////////////////////////////////////////////////
-    CRational const operator -(CRational const &rat) const;
+/*    const CRational operator-(CRational const &rational1, CRational const &rational2);*/
+
+/*    const CRational operator-(int number);*/
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -167,11 +168,6 @@ public:
     //	3 <= (7/2)     → true
     //	3 >= (8/2)     → false
     //////////////////////////////////////////////////////////////////////////
-    bool const operator <(CRational const &rat) const;
-    bool const operator >(CRational const &rat) const;
-    bool const operator <=(CRational const &rat) const;
-    bool const operator >=(CRational const &rat) const;
-
 
     //////////////////////////////////////////////////////////////////////////
     // TODO: 13. Реализовать оператор вывода рационального числа в выходной поток
@@ -194,6 +190,44 @@ private:
     // Нормализует рациональное число
     void Normalize();
 };
+
+inline bool const operator<(CRational const &rational1, CRational const &rational2)
+{
+    return ((rational1.GetNumerator() * rational2.GetDenominator()) <
+            (rational2.GetNumerator() * rational1.GetDenominator()));
+}
+
+inline bool const operator<=(CRational const &rational1, CRational const &rational2)
+{
+    return ((rational1.GetNumerator() * rational2.GetDenominator()) <=
+            (rational2.GetNumerator() * rational1.GetDenominator()));
+}
+
+inline bool const operator>=(CRational const &rational1, CRational const &rational2)
+{
+    return ((rational1.GetNumerator() * rational2.GetDenominator()) >=
+            (rational2.GetNumerator() * rational1.GetDenominator()));
+}
+
+inline bool const operator>(CRational const &rational1, CRational const &rational2)
+{
+    return ((rational1.GetNumerator() * rational2.GetDenominator()) >
+            (rational2.GetNumerator() * rational1.GetDenominator()));
+}
+
+inline CRational const operator-(CRational const &rational1, CRational const &rational2)
+{
+    return (CRational((rational1.GetNumerator() * rational2.GetDenominator()) -
+                      (rational2.GetNumerator() * rational1.GetDenominator()),
+                      rational1.GetDenominator() * rational2.GetDenominator()));
+}
+
+inline CRational const operator+(CRational const &rational1, CRational const &rational2)
+{
+    return (CRational((rational1.GetNumerator() * rational2.GetDenominator()) +
+                      (rational2.GetNumerator() * rational1.GetDenominator()),
+                      rational1.GetDenominator() * rational2.GetDenominator()));
+}
 
 // Вычисляет наибольший общий знаменатель чисел a и b
 unsigned GCD(unsigned a, unsigned b);

@@ -1,5 +1,5 @@
-
 #define BOOST_TEST_MODULE MyTestModule
+
 #include <boost/test/included/unit_test.hpp>
 
 // task1tests.cpp : Defines the entry point for the console application.
@@ -26,23 +26,26 @@ BOOST_AUTO_TEST_CASE(Test_Greates_Common_Denominator)
 	хранится в нормализованном виде
 	*/
 
-void VerifyRational(const CRational & r, int expectedNumerator, int expectedDenominator)
+void VerifyRational(const CRational &r, int expectedNumerator, int expectedDenominator)
 {
     BOOST_CHECK_EQUAL(r.GetNumerator(), expectedNumerator);
     BOOST_CHECK_EQUAL(r.GetDenominator(), expectedDenominator);
 }
 
 BOOST_AUTO_TEST_SUITE(Rational_number)
+
     BOOST_AUTO_TEST_CASE(is_0_by_default)
     {
         VerifyRational(CRational(), 0, 1);
     }
+
     BOOST_AUTO_TEST_CASE(can_be_constructed_from_integer)
     {
         VerifyRational(CRational(10), 10, 1);
         VerifyRational(CRational(-10), -10, 1);
         VerifyRational(CRational(0), 0, 1);
     }
+
     BOOST_AUTO_TEST_CASE(can_be_constructed_with_numerator_and_denominator)
     {
         VerifyRational(CRational(5, 2), 5, 2);
@@ -50,6 +53,7 @@ BOOST_AUTO_TEST_SUITE(Rational_number)
         VerifyRational(CRational(5, -2), -5, 2);
         VerifyRational(CRational(-5, -2), 5, 2);
     }
+
     BOOST_AUTO_TEST_CASE(is_normalized_after_construction)
     {
         VerifyRational(CRational(6, 8), 3, 4);
@@ -103,7 +107,14 @@ BOOST_AUTO_TEST_SUITE(Rational_number)
 //	1 + (1/2)     = (3/2)
 //////////////////////////////////////////////////////////////////////////
 
-
+    BOOST_AUTO_TEST_CASE(work_with_the_binary_plus)
+    {
+        VerifyRational(CRational(1, 2) + CRational(1, 6), 2, 3);
+        VerifyRational(CRational(1, 2) + CRational(1), 3, 2);
+        VerifyRational(CRational(1) + CRational(1, 2), 3, 2);
+        VerifyRational(CRational(1, 2) + 1, 3, 2);
+        VerifyRational(1 + CRational(1, 2), 3, 2);
+    }
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -120,6 +131,8 @@ BOOST_AUTO_TEST_SUITE(Rational_number)
         VerifyRational(CRational(1, 2) - CRational(1, 6), 1, 3);
         VerifyRational(CRational(1, 2) - CRational(1), -1, 2);
         VerifyRational(CRational(1) - CRational(1, 2), 1, 2);
+        VerifyRational(CRational(1, 2) - 1, -1, 2);
+        VerifyRational(1 - CRational(1, 2), 1, 2);
     }
 
 
