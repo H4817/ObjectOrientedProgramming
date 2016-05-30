@@ -67,17 +67,22 @@ unsigned GCD(unsigned a, unsigned b)
 // TODO: 4. Реализовать бинарный -
 //////////////////////////////////////////////////////////////////////////
 
-/*const CRational CRational::operator-(int number)
-{
-    auto copyLeftVal = *this;
-}*/
-
 
 //////////////////////////////////////////////////////////////////////////
 // TODO: 5. Реализовать оператор +=
 //////////////////////////////////////////////////////////////////////////
 
+CRational & CRational::operator+=(CRational const & rational)
+{
+    *this = *this + rational;
+    return *this;
+}
 
+CRational & CRational::operator-=(CRational const & rational)
+{
+    *this = *this - rational;
+    return *this;
+}
 
 
 //////////////////////////////////////////////////////////////////////////
