@@ -132,18 +132,6 @@ public:
 
 
     //////////////////////////////////////////////////////////////////////////
-    // TODO: 12. Реализовать операторы <, >, <=, >=
-    // Сравнивают два рациональных числа, рациональное с целым,
-    //	целое с рациональным:
-    //	(1/2) >= (1/3) → true
-    //	(1/2) <= (1/3) → false
-    //	(3/1) > 2      → true
-    //	(1/2) < 7      → true
-    //	3 <= (7/2)     → true
-    //	3 >= (8/2)     → false
-    //////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////
     // TODO: 13. Реализовать оператор вывода рационального числа в выходной поток
     //	std::ostream в формате <числитель>/<знаменатель>,
     //	например: 7/15
@@ -167,6 +155,18 @@ private:
     // Нормализует рациональное число
     void Normalize();
 };
+
+inline bool const operator==(CRational const &rational1, CRational const &rational2)
+{
+    return ((rational1.GetNumerator() * rational2.GetDenominator()) ==
+            (rational2.GetNumerator() * rational1.GetDenominator()));
+}
+
+inline bool const operator!=(CRational const &rational1, CRational const &rational2)
+{
+    return ((rational1.GetNumerator() * rational2.GetDenominator()) !=
+            (rational2.GetNumerator() * rational1.GetDenominator()));
+}
 
 inline bool const operator<(CRational const &rational1, CRational const &rational2)
 {
