@@ -89,6 +89,8 @@ public:
     //	std::istream в формате <числитель>/<знаменатель>,
     //	например: 7/15
     //////////////////////////////////////////////////////////////////////////
+    CRational const operator + () const;
+    CRational const operator - () const;
     CRational &operator+=(CRational const &rational);
     CRational &operator-=(CRational const &rational);
     CRational &operator*=(CRational const &rational);

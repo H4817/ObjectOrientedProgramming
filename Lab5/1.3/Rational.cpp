@@ -47,9 +47,6 @@ unsigned GCD(unsigned a, unsigned b)
     return (a != 0) ? a : 1;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// TODO: 2. Реализовать унарный + и унарный -
-//////////////////////////////////////////////////////////////////////////
 
 CRational & CRational::operator+=(CRational const & rational)
 {
@@ -74,6 +71,17 @@ CRational & CRational::operator/=(CRational const & rational)
     *this = *this / rational;
     return *this;
 }
+
+CRational const CRational::operator+ () const
+{
+    return CRational(abs(m_numerator), m_denominator);
+}
+
+CRational const CRational::operator- ()	const
+{
+	return CRational(m_numerator * -1, m_denominator);
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // TODO: 13. Реализовать оператор вывода рационального числа в выходной поток
