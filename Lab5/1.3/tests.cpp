@@ -60,14 +60,13 @@ BOOST_AUTO_TEST_SUITE(Rational_number)
         VerifyRational(CRational(-10, 20), -1, 2);
     }
 
-    BOOST_AUTO_TEST_CASE(work_with_unary_minus)
+    BOOST_AUTO_TEST_CASE(work_with_unary_minus_and_plus)
     {
-        VerifyRational(-CRational(1, 3), -1, 3);
-    }
-
-    BOOST_AUTO_TEST_CASE(work_with_unary_plus)
-    {
-        VerifyRational(+CRational(-1, 3), 1, 3);
+        const CRational r1(3, 5);
+        const CRational r2 = -r1;
+        VerifyRational(r2, -3, 5);
+        const CRational r3 = +r2;
+        VerifyRational(r3, -3, 5);
     }
 
     BOOST_AUTO_TEST_CASE(work_with_the_binary_plus)
@@ -145,7 +144,21 @@ BOOST_AUTO_TEST_SUITE(Rational_number)
         BOOST_CHECK(3 != CRational(2, 3));
     }
 
-    BOOST_AUTO_TEST_CASE(compare)
+    BOOST_AUTO_TEST_CASE(work_with_left_shift_operator)
+    {
+        {
+            std::ostringstream oss;
+            oss << CRational(4, 9);
+            BOOST_CHECK_EQUAL(oss.str(), "4/9");
+        }
+        {
+            std::ostringstream oss;
+            oss << CRational(-5, 7);
+            BOOST_CHECK_EQUAL(oss.str(), "-5/7");
+        }
+    }
+
+    BOOST_AUTO_TEST_CASE(work_with_compare_operators)
     {
         BOOST_CHECK(CRational(1, 2) >= CRational(1, 3));
         BOOST_CHECK(!(CRational(1, 2) <= CRational(1, 3)));
@@ -154,11 +167,6 @@ BOOST_AUTO_TEST_SUITE(Rational_number)
         BOOST_CHECK(CRational(3) <= CRational(7, 2));
         BOOST_CHECK(!(CRational(1, 2) >= CRational(8, 2)));
     }
-//////////////////////////////////////////////////////////////////////////
-// TODO: 13. Реализовать оператор вывода рационального числа в выходной поток
-//	std::ostream в формате <числитель>/<знаменатель>,
-//	например: 7/15
-//////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////
 // TODO: 14. Реализовать оператор ввода рационального числа из входного потока

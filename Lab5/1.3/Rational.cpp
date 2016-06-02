@@ -74,18 +74,13 @@ CRational & CRational::operator/=(CRational const & rational)
 
 CRational const CRational::operator+ () const
 {
-    return CRational(abs(m_numerator), m_denominator);
+    return *this;
 }
 
 CRational const CRational::operator- ()	const
 {
 	return CRational(m_numerator * -1, m_denominator);
 }
-
-
-//////////////////////////////////////////////////////////////////////////
-// TODO: 13. Реализовать оператор вывода рационального числа в выходной поток
-//////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////
 // TODO: 14. Реализовать оператор ввода рационального числа из входного потока
