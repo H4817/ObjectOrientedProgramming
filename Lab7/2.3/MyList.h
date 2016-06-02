@@ -17,11 +17,17 @@ public:
 
     void Append(const T &data);
 
-    T &GetBackElement();
+    T &GetBackElement()
+    {
+        return m_tail->m_data;
+    }
 
     T const &GetBackElement() const;
 
-    bool IsEmpty();
+    bool IsEmpty()
+    {
+        return m_elements == 0;
+    }
 
     void Clear();
 
