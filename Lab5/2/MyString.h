@@ -3,7 +3,7 @@
 class CMyString
 {
 public:
-    CMyString() = default;
+    CMyString();
 
     CMyString(const char *pString);
 
@@ -25,9 +25,8 @@ public:
 
     void Clear();
 
-
 private:
-    char *m_data = '\0';
+    char *m_data;
     size_t m_length = 0;
 };
 
