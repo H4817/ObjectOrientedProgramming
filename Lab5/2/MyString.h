@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 class CMyString
 {
@@ -30,4 +31,25 @@ private:
     size_t m_length = 0;
 };
 
+inline bool const operator==(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    if (cMyString1.GetLength() != cMyString2.GetLength())
+    {
+        return false;
+    }
+    return memcmp(cMyString1.GetStringData(), cMyString2.GetStringData(), cMyString1.GetLength()) == 0;
+}
 
+inline bool const operator!=(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    if (cMyString1.GetLength() != cMyString2.GetLength())
+    {
+        return true;
+    }
+    return memcmp(cMyString1.GetStringData(), cMyString2.GetStringData(), cMyString1.GetLength()) != 0;
+}
+
+inline bool const operator>(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    return cMyString1.GetLength() > cMyString2.GetLength();
+}
