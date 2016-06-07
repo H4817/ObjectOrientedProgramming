@@ -1,8 +1,8 @@
 #pragma once
 
-#include "IPerson.h"
+#include "PersonImpl.h"
 
-class IPupil : public IPerson
+class IPupil : public CPersonImpl
 {
 protected:
     std::string nameOfSchool;

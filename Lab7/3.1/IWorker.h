@@ -1,9 +1,9 @@
 #pragma once
 
-#include "IPerson.h"
+#include "PersonImpl.h"
 
-class IWorker : public IPerson
+class IWorker : public CPersonImpl
 {
 protected:
-    std::string profession;
+    virtual std::string GetProfession() const;
 };

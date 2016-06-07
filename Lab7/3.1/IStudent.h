@@ -1,10 +1,12 @@
 #pragma once
 
-#include "IPerson.h"
+#include "PersonImpl.h"
+#include "StudentImpl.h"
 
-class IStudent : public IPerson
+class IStudent : public CPersonImpl
 {
 protected:
+
     std::string nameOfCollege;
     std::string numberOfStudentsCard;
 };

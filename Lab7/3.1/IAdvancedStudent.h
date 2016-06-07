@@ -1,8 +1,8 @@
 #pragma once
 
-#include "IStudent.h"
+#include "StudentImpl.h"
 
-class IAdvancedStudent : public IStudent
+class IAdvancedStudent : public CStudentImpl
 {
 protected:
     std::string subjectOfDissertation;

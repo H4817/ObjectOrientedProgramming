@@ -1,12 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include "PersonImpl.h"
 
 class IPerson
 {
 protected:
-    std::string firstName;
-    std::string secondName;
-    std::string patronymic;
-    std::string address;
 };
