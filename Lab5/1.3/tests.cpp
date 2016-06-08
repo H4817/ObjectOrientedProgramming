@@ -142,6 +142,7 @@ BOOST_AUTO_TEST_SUITE(Rational_number)
         BOOST_CHECK(CRational(1, 2) != CRational(2, 3));
         BOOST_CHECK(CRational(1, 2) != 7);
         BOOST_CHECK(3 != CRational(2, 3));
+        BOOST_CHECK(!(3 != CRational(3, 1)));
     }
 
     BOOST_AUTO_TEST_CASE(work_with_left_shift_operator)
@@ -158,15 +159,46 @@ BOOST_AUTO_TEST_SUITE(Rational_number)
         }
     }
 
+    BOOST_AUTO_TEST_CASE(work_with_right_shift_operator)
+    {
+        {
+            CRational rational;
+            std::istringstream iss("-5/7");
+            iss >> rational;
+            BOOST_CHECK_EQUAL(iss.str(), "-5/7");
+        }
+        {
+            CRational rational;
+            std::istringstream iss("1/2");
+            iss >> rational;
+            VerifyRational(rational, 1, 2);
+        }
+    }
+
     BOOST_AUTO_TEST_CASE(work_with_compare_operators)
     {
         BOOST_CHECK(CRational(1, 2) >= CRational(1, 3));
         BOOST_CHECK(!(CRational(1, 2) <= CRational(1, 3)));
         BOOST_CHECK(CRational(3, 1) > CRational(2));
+        BOOST_CHECK(!(CRational(7, 1) > CRational(44)));
         BOOST_CHECK(CRational(1, 2) < CRational(7));
+        BOOST_CHECK(!(CRational(7, 1) < CRational(4)));
         BOOST_CHECK(CRational(3) <= CRational(7, 2));
         BOOST_CHECK(!(CRational(1, 2) >= CRational(8, 2)));
     }
+
+    BOOST_AUTO_TEST_CASE(work_with_to_compound_fraction)
+    {
+        CRational rational = CRational(7, 3);
+        CRational rational1 = CRational(-7, 3);
+        BOOST_CHECK(rational.ToCompoundFraction().first == 2);
+        BOOST_CHECK(rational.ToCompoundFraction().second.GetNumerator() == 1);
+        BOOST_CHECK(rational.ToCompoundFraction().second.GetDenominator() == 3);
+        BOOST_CHECK(rational1.ToCompoundFraction().first == -2);
+        BOOST_CHECK(rational1.ToCompoundFraction().second.GetNumerator() == -1);
+        BOOST_CHECK(rational1.ToCompoundFraction().second.GetDenominator() == 3);
+    }
+
 
 //////////////////////////////////////////////////////////////////////////
 // TODO: 14. Реализовать оператор ввода рационального числа из входного потока

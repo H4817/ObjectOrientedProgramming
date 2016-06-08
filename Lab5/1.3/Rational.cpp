@@ -20,6 +20,13 @@ int CRational::GetNumerator() const
     return m_numerator;
 }
 
+std::pair<int, CRational> CRational::ToCompoundFraction()const
+{
+	int integer = static_cast<int>(ToDouble());
+	int numerator = m_numerator - m_denominator * integer;
+	return std::make_pair<int, CRational>(std::move(integer), CRational(numerator, m_denominator));
+}
+
 int CRational::GetDenominator() const
 {
     return m_denominator;
@@ -32,7 +39,7 @@ void CRational::Normalize()
     m_denominator /= gcd;
 }
 
-double CRational::ToDouble()
+double CRational::ToDouble() const
 {
     return static_cast<double>(m_numerator) / static_cast<double>(m_denominator);
 }

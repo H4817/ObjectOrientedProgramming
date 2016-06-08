@@ -17,7 +17,10 @@ public:
     // Возвращает знаменатель
     int GetDenominator() const;
 
-    double ToDouble();
+    double ToDouble() const;
+
+    std::pair<int, CRational> ToCompoundFraction()const;
+
 
     //////////////////////////////////////////////////////////////////////////
     // TODO: 14. Реализовать оператор ввода рационального числа из входного потока
@@ -44,37 +47,37 @@ private:
     void Normalize();
 };
 
-inline bool const operator==(CRational const &rational1, CRational const &rational2)
+inline bool operator==(CRational const &rational1, CRational const &rational2)
 {
     return ((rational1.GetNumerator() * rational2.GetDenominator()) ==
             (rational2.GetNumerator() * rational1.GetDenominator()));
 }
 
-inline bool const operator!=(CRational const &rational1, CRational const &rational2)
+inline bool operator!=(CRational const &rational1, CRational const &rational2)
 {
     return ((rational1.GetNumerator() * rational2.GetDenominator()) !=
             (rational2.GetNumerator() * rational1.GetDenominator()));
 }
 
-inline bool const operator<(CRational const &rational1, CRational const &rational2)
+inline bool operator<(CRational const &rational1, CRational const &rational2)
 {
     return ((rational1.GetNumerator() * rational2.GetDenominator()) <
             (rational2.GetNumerator() * rational1.GetDenominator()));
 }
 
-inline bool const operator<=(CRational const &rational1, CRational const &rational2)
+inline bool operator<=(CRational const &rational1, CRational const &rational2)
 {
     return ((rational1.GetNumerator() * rational2.GetDenominator()) <=
             (rational2.GetNumerator() * rational1.GetDenominator()));
 }
 
-inline bool const operator>=(CRational const &rational1, CRational const &rational2)
+inline bool operator>=(CRational const &rational1, CRational const &rational2)
 {
     return ((rational1.GetNumerator() * rational2.GetDenominator()) >=
             (rational2.GetNumerator() * rational1.GetDenominator()));
 }
 
-inline bool const operator>(CRational const &rational1, CRational const &rational2)
+inline bool operator>(CRational const &rational1, CRational const &rational2)
 {
     return ((rational1.GetNumerator() * rational2.GetDenominator()) >
             (rational2.GetNumerator() * rational1.GetDenominator()));
@@ -111,6 +114,17 @@ inline std::ostream &operator<<(std::ostream &outputStream, CRational const &rat
     return outputStream << rational.GetNumerator() << "/" << rational.GetDenominator();
 }
 
+inline std::istream &operator>>(std::istream &inputStream, CRational &rational)
+{
+    int numerator;
+    int denominator;
+    if ((inputStream >> numerator) && (inputStream.get() == '/') && (inputStream >> denominator))
+    {
+        rational = CRational(numerator, denominator);
+    }
+    return inputStream;
+}
+//TODO считать числитель, слеш, знаменатель
 // Вычисляет наибольший общий знаменатель чисел a и b
 unsigned GCD(unsigned a, unsigned b);
 
