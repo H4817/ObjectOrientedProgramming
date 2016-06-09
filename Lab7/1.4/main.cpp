@@ -6,20 +6,12 @@ using namespace std;
 template<typename T>
 T ArraySum(std::vector<T> const &arr)
 {
-    try
+    T arraySum = T();
+    for (auto &item : arr)
     {
-        T arraySum = T();
-        for (auto it : arr)
-        {
-            arraySum += it;
-        }
-        return arraySum;
+        arraySum += item;
     }
-    catch (std::exception const &e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-
+    return arraySum;
 }
 
 int main()
