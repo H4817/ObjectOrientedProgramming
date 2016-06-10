@@ -56,9 +56,12 @@ BOOST_FIXTURE_TEST_SUITE(initialization_tests, MyListStructure)
         CMyList<std::string> myStringList1;
         myStringList1.PushBack("test");
         CMyList<std::string> myStringList2;
+        CMyList<std::string> myStringList3(myStringList1);
         myStringList2 = myStringList1;
         BOOST_CHECK(myStringList2.GetBackElement() == "test");
         BOOST_CHECK(myStringList2.GetSize());
+        BOOST_CHECK(myStringList3.GetBackElement() == "test");
+        BOOST_CHECK(myStringList3.GetSize());
     }
 
     BOOST_AUTO_TEST_CASE(should_clear_an_instance)
@@ -67,9 +70,20 @@ BOOST_FIXTURE_TEST_SUITE(initialization_tests, MyListStructure)
         myStringList.PushBack("test2");
         myStringList.PushBack("test3");
         BOOST_CHECK(myStringList.GetSize());
-/*        BOOST_CHECK_NO_THROW(myStringList.Clear());*/
+        BOOST_CHECK_NO_THROW(myStringList.Clear());
         BOOST_CHECK(!myStringList.GetSize());
     }
+
+/*    BOOST_AUTO_TEST_CASE(should_traverse_a_sequence_through_iterator)
+    {
+        myStringList.PushBack("test1");
+        myStringList.PushBack("test2");
+        myStringList.PushBack("test3");
+        for (auto it = myStringList.begin(); it != myStringList.end(); ++it)
+        {
+
+        }
+    }*/
 
 BOOST_AUTO_TEST_SUITE_END()
 

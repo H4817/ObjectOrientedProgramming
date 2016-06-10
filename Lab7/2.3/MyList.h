@@ -9,16 +9,33 @@ template<typename T>
 
 class CMyList
 {
+    struct Node
+    {
+        T m_data;
+        Node *m_next, *m_prev;
+
+        Node(T const &data, Node *next, Node *prev)
+                : m_data(data), m_next(next), m_prev(prev)
+        {
+        }
+
+        Node(T &&data, Node *next, Node *prev)
+                : m_data(std::move(data)), m_next(next), m_prev(prev)
+        {
+        }
+    };
+
 public:
     CMyList() = default;
 
-    CMyList(const CMyList &cMyList)
-    { }
+    CMyList(const CMyList &cMyList) : m_head(cMyList.m_head), m_tail(cMyList.m_tail), m_elements(cMyList.m_elements)
+    {
+    }
 
     size_t GetSize() const
-    { return m_elements; }
-
-    void Append(const T &data);
+    {
+        return m_elements;
+    }
 
     T &GetBackElement()
     {
@@ -32,13 +49,18 @@ public:
         return m_elements == 0;
     }
 
-/*    void Clear()
+    void Clear()
     {
-        while ()
+        Node *curr = m_head;
+        while (m_head)
         {
-
+            curr = m_head;
+            m_head = m_head->m_next;
+            delete curr;
         }
-    }*/
+        m_head = m_tail = nullptr;
+        m_elements = 0;
+    }
 
     void PushBack(const T &value = T())
     {
@@ -62,23 +84,62 @@ public:
         ++m_elements;
     }
 
-private:
-    struct Node
+/*    CListIterator begin()
     {
-        T m_data;
-        Node *m_next, *m_prev;
+        return CListIterator(m_head, false);
+    }
 
-        Node(T const &data, Node *next, Node *prev)
-                : m_data(data), m_next(next), m_prev(prev)
+    CListIterator end()
+    {
+        return CListIterator(m_tail->m_next, false);
+    }*/
+
+    template<typename P>
+    class CListIterator : public std::iterator <std::random_access_iterator_tag, P>
+    {
+    public:
+        CListIterator(Node * value, bool isReverse = false)
+                : m_node(value)
+                , m_isReverse(isReverse)
+        { }
+
+        friend class CMyList<T>;
+
+        bool operator!=(CListIterator const& other) const
         {
+            return m_node != other.m_node;
+        }
+        bool operator==(CListIterator const& other) const
+        {
+            return m_node == other.m_node;
         }
 
-        Node(T &&data, Node *next, Node *prev)
-                : m_data(std::move(data)), m_next(next), m_prev(prev)
+        P & operator*() const
         {
+            return m_node->m_data;
         }
+
+        CListIterator& operator++()
+        {
+            m_isReverse ? m_node = m_node->m_prev : m_node = m_node->m_next;
+            return *this;
+        }
+        CListIterator& operator--()
+        {
+            m_isReverse ? m_node = m_node->m_next : m_node = m_node->m_prev;
+            return *this;
+        }
+
+    private:
+        Node* operator->()const
+        {
+            return m_node;
+        }
+        Node* m_node = nullptr;
+        bool m_isReverse = false;
     };
 
+private:
     Node *m_head = nullptr;
     Node *m_tail = nullptr;
     size_t m_elements = 0;
