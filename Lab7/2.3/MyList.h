@@ -3,6 +3,9 @@
 #include <iostream>
 #include <new>
 #include <algorithm>
+#include <cassert>
+#include <string>
+#include <memory>
 
 
 template<typename T>
@@ -12,7 +15,8 @@ class CMyList
     struct Node
     {
         T m_data;
-        Node *m_next, *m_prev;
+        Node *m_next;
+        Node *m_prev;
 
         Node(T const &data, Node *next, Node *prev)
                 : m_data(data), m_next(next), m_prev(prev)
@@ -28,6 +32,11 @@ class CMyList
 public:
     CMyList() = default;
 
+    ~CMyList()
+    {
+        Clear();
+    }
+
     CMyList(const CMyList &cMyList) : m_head(cMyList.m_head), m_tail(cMyList.m_tail), m_elements(cMyList.m_elements)
     {
     }
@@ -41,8 +50,6 @@ public:
     {
         return m_tail->m_data;
     }
-
-    T const &GetBackElement() const;
 
     bool IsEmpty()
     {
@@ -84,60 +91,74 @@ public:
         ++m_elements;
     }
 
-/*    CListIterator begin()
-    {
-        return CListIterator(m_head, false);
-    }
-
-    CListIterator end()
-    {
-        return CListIterator(m_tail->m_next, false);
-    }*/
-
     template<typename P>
-    class CListIterator : public std::iterator <std::random_access_iterator_tag, P>
+    class CListIterator : public std::iterator<std::random_access_iterator_tag, P>
     {
     public:
-        CListIterator(Node * value, bool isReverse = false)
-                : m_node(value)
-                , m_isReverse(isReverse)
+        CListIterator(Node *value, bool isReverse = false)
+                : m_node(value), m_isReverse(isReverse)
         { }
 
         friend class CMyList<T>;
 
-        bool operator!=(CListIterator const& other) const
+        bool operator!=(CListIterator const &other) const
         {
             return m_node != other.m_node;
         }
-        bool operator==(CListIterator const& other) const
+
+        bool operator==(CListIterator const &other) const
         {
             return m_node == other.m_node;
         }
 
-        P & operator*() const
+        P &operator*() const
         {
             return m_node->m_data;
         }
 
-        CListIterator& operator++()
+        CListIterator &operator++()
         {
             m_isReverse ? m_node = m_node->m_prev : m_node = m_node->m_next;
             return *this;
         }
-        CListIterator& operator--()
+
+        CListIterator &operator--()
         {
             m_isReverse ? m_node = m_node->m_next : m_node = m_node->m_prev;
             return *this;
         }
 
     private:
-        Node* operator->()const
+        Node *operator->() const
         {
             return m_node;
         }
-        Node* m_node = nullptr;
+
+        Node *m_node = nullptr;
         bool m_isReverse = false;
     };
+
+    typedef CListIterator<T> ListIterator;
+
+    ListIterator begin()
+    {
+        return ListIterator(m_head, false);
+    }
+
+    ListIterator end()
+    {
+        return ListIterator(m_tail->m_next, false);
+    }
+
+    ListIterator rbegin()
+    {
+        return ListIterator(m_tail, true);
+    }
+
+    ListIterator rend()
+    {
+        return ListIterator(m_head->m_prev, true);
+    }
 
 private:
     Node *m_head = nullptr;

@@ -74,16 +74,26 @@ BOOST_FIXTURE_TEST_SUITE(initialization_tests, MyListStructure)
         BOOST_CHECK(!myStringList.GetSize());
     }
 
-/*    BOOST_AUTO_TEST_CASE(should_traverse_a_sequence_through_iterator)
+    BOOST_AUTO_TEST_CASE(should_traverse_a_sequence_through_iterator)
     {
         myStringList.PushBack("test1");
         myStringList.PushBack("test2");
         myStringList.PushBack("test3");
         for (auto it = myStringList.begin(); it != myStringList.end(); ++it)
         {
-
+            std::cout << myStringList.GetSize() << std::endl;
         }
-    }*/
+    }
+
+    BOOST_AUTO_TEST_CASE(should_traverse_a_sequence_through_reverse_iterator)
+    {
+        myStringList.PushBack("test1");
+        myStringList.PushBack("test2");
+        for (auto it = myStringList.rbegin(); it != myStringList.rend(); ++it)
+        {
+            std::cout << myStringList.GetSize() << std::endl;
+        }
+    }
 
 BOOST_AUTO_TEST_SUITE_END()
 
