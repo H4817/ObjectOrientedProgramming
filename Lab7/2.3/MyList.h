@@ -3,9 +3,9 @@
 #include <iostream>
 #include <new>
 #include <algorithm>
-#include <cassert>
 #include <string>
 #include <memory>
+#include <bitset>
 
 
 template<typename T>
@@ -37,8 +37,16 @@ public:
         Clear();
     }
 
-    CMyList(const CMyList &cMyList) : m_head(cMyList.m_head), m_tail(cMyList.m_tail), m_elements(cMyList.m_elements)
+    CMyList(CMyList &cMyList)
     {
+        CMyList<T> tmp;
+        for (auto &elem : cMyList)
+        {
+            tmp.PushBack(elem);
+        }
+        std::swap(m_head, tmp.m_head);
+        std::swap(m_tail, tmp.m_tail);
+        std::swap(m_elements, tmp.m_elements);
     }
 
     size_t GetSize() const
@@ -48,13 +56,17 @@ public:
 
     T &GetBackElement()
     {
-        return m_tail->m_data;
+        if (m_tail)
+            return m_tail->m_data;
+        else
+            throw;
     }
 
     bool IsEmpty()
     {
         return m_elements == 0;
     }
+
 
     void Clear()
     {
@@ -158,6 +170,54 @@ public:
     ListIterator rend()
     {
         return ListIterator(m_head->m_prev, true);
+    }
+
+    void Insert(const ListIterator &listIterator, const T & value)
+    {
+        if (listIterator == begin())
+        {
+            PushFront(value);
+        }
+        else if (listIterator == end())
+        {
+            PushBack(value);
+        }
+        else
+        {
+            Node* node = new Node(value, std::move(listIterator->m_prev->m_next), listIterator->m_prev);
+            listIterator->m_prev = std::move(node);
+            node->m_prev->m_next = std::move(node);
+        }
+    }
+
+    void Erase(const ListIterator & listIterator)
+    {
+        if (m_elements == 1)
+        {
+            Clear();
+            return;
+        }
+
+        if (listIterator == begin())
+        {
+            listIterator->m_next->m_prev = nullptr;
+            m_head = std::move(listIterator->m_next);
+        }
+        else if (listIterator->m_data == GetBackElement())
+        {
+            listIterator->m_prev->m_next = nullptr;
+            m_tail = std::move(listIterator->m_prev);
+        }
+        else
+        {
+            listIterator->m_next->m_prev = std::move(listIterator->m_prev);
+            listIterator->m_prev->m_next = std::move(listIterator->m_next);
+        }
+
+        if (m_elements > 0)
+        {
+            m_elements--;
+        }
     }
 
 private:
