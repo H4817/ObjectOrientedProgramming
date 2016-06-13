@@ -10,11 +10,11 @@ public:
 
     CMyString(const char *pString, size_t length);
 
-    CMyString(CMyString const &other);
+    CMyString(const CMyString &other);
+
+    CMyString(const std::string &stlString);
 
     CMyString(CMyString &&other);
-
-    CMyString(std::string const &stlString);
 
     ~CMyString();
 
@@ -22,13 +22,14 @@ public:
 
     const char *GetStringData() const;
 
-    CMyString const SubString(size_t start, size_t length = SIZE_MAX) const;
+    const CMyString SubString(size_t start, size_t length = SIZE_MAX) const;
 
     void Clear();
 
 private:
-    char *m_data;
     size_t m_length = 0;
+    char *m_data;
+
 };
 
 inline bool const operator==(CMyString const &cMyString1, CMyString const &cMyString2)
@@ -52,4 +53,26 @@ inline bool const operator!=(CMyString const &cMyString1, CMyString const &cMySt
 inline bool const operator>(CMyString const &cMyString1, CMyString const &cMyString2)
 {
     return cMyString1.GetLength() > cMyString2.GetLength();
+}
+
+inline bool const operator<(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    return cMyString1.GetLength() < cMyString2.GetLength();
+}
+
+inline bool const operator>=(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    return cMyString1.GetLength() >= cMyString2.GetLength();
+}
+
+inline bool const operator<=(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    return cMyString1.GetLength() <= cMyString2.GetLength();
+}
+
+inline CMyString const operator+(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    std::string str1(cMyString1.GetStringData());
+    std::string str2(cMyString2.GetStringData());
+    return CMyString((str1 + str2).c_str(), cMyString1.GetLength() + cMyString2.GetLength());
 }

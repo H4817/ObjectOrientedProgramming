@@ -63,7 +63,7 @@ BOOST_FIXTURE_TEST_SUITE(string_test, MyString)
         BOOST_CHECK(cMyString1 != cMyString2);
     }
 
-    BOOST_AUTO_TEST_CASE(work_with_Greater_than_operator)
+    BOOST_AUTO_TEST_CASE(work_with_greater_than_operator)
     {
         CMyString cMyString1("Hello world!!1");
 
@@ -72,14 +72,53 @@ BOOST_FIXTURE_TEST_SUITE(string_test, MyString)
         BOOST_CHECK(cMyString1 > cMyString2);
     }
 
-    BOOST_AUTO_TEST_CASE(should_get_correct_substr)
+    BOOST_AUTO_TEST_CASE(work_with_less_than_operator)
     {
-        const char *ch = "Hello world";
-        CMyString cMyString1(ch);
-        CMyString cMyString2("world");
-        BOOST_CHECK(!(cMyString1.SubString(2, 3) == cMyString2.GetStringData()));
+        CMyString cMyString1("Hello ");
+
+        CMyString cMyString2("Hello friend");
+
+        BOOST_CHECK(cMyString1 < cMyString2);
     }
 
+    BOOST_AUTO_TEST_CASE(work_with_greater_than_or_equal_to_operator)
+    {
+        CMyString cMyString1("Hello world!");
+
+        CMyString cMyString2("Hello friend");
+
+        CMyString cMyString3("Hello");
+
+        BOOST_CHECK(cMyString1 >= cMyString2);
+        BOOST_CHECK(cMyString2 >= cMyString3);
+    }
+
+    BOOST_AUTO_TEST_CASE(work_with_less_than_or_equal_to_operator)
+    {
+        CMyString cMyString1("Hello world!");
+
+        CMyString cMyString2("Hello friend");
+
+        CMyString cMyString3("Hello");
+        BOOST_CHECK(cMyString1 <= cMyString2);
+        BOOST_CHECK(cMyString3 <= cMyString2);
+    }
+    
+    BOOST_AUTO_TEST_CASE(work_with_addition_operator)
+    {
+        CMyString cMyString1("Hello ");
+        CMyString cMyString2("w\0rld");
+        BOOST_CHECK(cMyString1 + cMyString2 == "Hello w\0rld");
+    }
+
+    BOOST_AUTO_TEST_CASE(should_get_correct_substring)
+    {
+        CMyString cMyString1("test1 test2 test3");
+        BOOST_CHECK_NO_THROW(cMyString1.SubString(0, 5));
+        BOOST_CHECK(cMyString1.SubString(0, 5) == "test1");
+        BOOST_CHECK(cMyString1.SubString(6, 5) == "test2");
+        BOOST_CHECK(cMyString1.SubString(12, 5) == "test3");
+    }
 
 BOOST_AUTO_TEST_SUITE_END()
 
