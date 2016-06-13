@@ -33,19 +33,15 @@ BOOST_FIXTURE_TEST_SUITE(initialization_tests, MyListStructure)
         CMyList<int> cMyList1;
         BOOST_CHECK_NO_THROW(cMyList1.PushBack(3));
         BOOST_CHECK_NO_THROW(cMyList1.PushBack(1.f));
-        BOOST_CHECK_NO_THROW(cMyList1.PushBack());
 
         BOOST_CHECK_NO_THROW(myStringList.PushBack("123"));
         BOOST_CHECK_NO_THROW(myStringList.PushBack("test"));
-        BOOST_CHECK_NO_THROW(myStringList.PushBack());
 
         BOOST_CHECK_NO_THROW(myIntList.PushFront(3));
         BOOST_CHECK_NO_THROW(myIntList.PushFront(1.f));
-        BOOST_CHECK_NO_THROW(myIntList.PushFront());
         CMyList<std::string> cMyList4;
         BOOST_CHECK_NO_THROW(cMyList4.PushFront("123"));
         BOOST_CHECK_NO_THROW(cMyList4.PushFront("test"));
-        BOOST_CHECK_NO_THROW(cMyList4.PushFront());
     }
 
     BOOST_AUTO_TEST_CASE(should_pass_when_list_is_empty)
@@ -86,25 +82,31 @@ BOOST_FIXTURE_TEST_SUITE(initialization_tests, MyListStructure)
     {
         PushStrings(myStringList);
         auto vec = GetStringVector();
-        int counter = 0;
-        for (auto it = myStringList.begin(); it != myStringList.end(); ++it)
-        {
-            BOOST_CHECK(*it == vec[counter]);
-            ++counter;
-        }
+        BOOST_CHECK(std::equal(myStringList.begin(), myStringList.end(), vec.begin()));
     }
 
     BOOST_AUTO_TEST_CASE(should_traverse_a_sequence_through_reverse_iterator)
     {
         PushStrings(myStringList);
         auto vec = GetStringVector();
-        auto counter = vec.size() - 1;
-        for (auto it = myStringList.rbegin(); it != myStringList.rend(); ++it)
-        {
-            BOOST_CHECK(*it == vec[counter]);
-            --counter;
-        }
+        BOOST_CHECK(std::equal(myStringList.rbegin(), myStringList.rend(), vec.rbegin()));
     }
+
+/*    BOOST_AUTO_TEST_CASE(should_traverse_a_sequence_through_const_iterator)
+    {
+        PushStrings(myStringList);
+        const CMyList <std::string> cMyList1 = myStringList;
+        const auto vec = GetStringVector();
+        BOOST_CHECK(std::equal(cMyList1.cbegin(), cMyList1.cend(), vec.cbegin()));
+    }
+
+    BOOST_AUTO_TEST_CASE(should_traverse_a_sequence_through_const_reverse_iterator)
+    {
+        PushStrings(myStringList);
+        const CMyList <std::string> cMyList1 = myStringList;
+        const auto vec = GetStringVector();
+        BOOST_CHECK(std::equal(cMyList1.crbegin(), cMyList1.crend(), vec.crbegin()));
+    }*/
 
     BOOST_AUTO_TEST_CASE(should_insert_a_value_at_iterator_pos)
     {
@@ -113,14 +115,8 @@ BOOST_FIXTURE_TEST_SUITE(initialization_tests, MyListStructure)
         BOOST_CHECK_EQUAL(*myStringList.begin(), "begin");
         myStringList.Insert(myStringList.end(), "end");
         myStringList.Insert(++myStringList.begin(), "test0");
-
         std::vector<std::string> expectedStr = {"begin", "test0", "test1", "test2", "test3", "end"};
-        unsigned short counter = 0;
-        for (auto it = myStringList.begin(); it != myStringList.end(); ++it)
-        {
-            BOOST_CHECK(*it == expectedStr[counter]);
-            ++counter;
-        }
+        BOOST_CHECK(std::equal(myStringList.begin(), myStringList.end(), expectedStr.begin()));
     }
 
     BOOST_AUTO_TEST_CASE(should_erase_a_value_at_iterator_pos)

@@ -9,7 +9,6 @@
 
 
 template<typename T>
-
 class CMyList
 {
     struct Node
@@ -37,24 +36,13 @@ public:
         Clear();
     }
 
-    CMyList(CMyList &cMyList)
-    {
-        CMyList<T> tmp;
-        for (auto &elem : cMyList)
-        {
-            tmp.PushBack(elem);
-        }
-        std::swap(m_head, tmp.m_head);
-        std::swap(m_tail, tmp.m_tail);
-        std::swap(m_elements, tmp.m_elements);
-    }
 
     size_t GetSize() const
     {
-        return m_elements;
+        return m_size;
     }
 
-    T &GetBackElement()
+    const T &GetBackElement()
     {
         if (m_tail)
             return m_tail->m_data;
@@ -62,26 +50,33 @@ public:
             throw;
     }
 
-    bool IsEmpty()
+    const T &GetBackElement() const
     {
-        return m_elements == 0;
+        if (m_tail)
+            return m_tail->m_data;
+        else
+            throw;
+    }
+
+    bool IsEmpty() const
+    {
+        return m_size == 0;
     }
 
 
     void Clear()
     {
-        Node *curr = m_head;
         while (m_head)
         {
-            curr = m_head;
+            Node *current = m_head;
             m_head = m_head->m_next;
-            delete curr;
+            delete current;
         }
         m_head = m_tail = nullptr;
-        m_elements = 0;
+        m_size = 0;
     }
 
-    void PushBack(const T &value = T())
+    void PushBack(const T &value)
     {
         Node *newNode = new Node(value, nullptr, m_tail);
         if (m_head == nullptr)
@@ -89,10 +84,10 @@ public:
         if (m_tail != nullptr)
             m_tail->m_next = newNode;
         m_tail = newNode;
-        ++m_elements;
+        ++m_size;
     }
 
-    void PushFront(const T &value = T())
+    void PushFront(const T &value)
     {
         Node *newNode = new Node(value, m_head, nullptr);
         if (m_tail == nullptr)
@@ -100,14 +95,14 @@ public:
         if (m_head != nullptr)
             m_head->m_prev = newNode;
         m_head = newNode;
-        ++m_elements;
+        ++m_size;
     }
 
     template<typename P>
-    class CListIterator : public std::iterator<std::random_access_iterator_tag, P>
+    class CListIterator : public std::iterator<std::bidirectional_iterator_tag, P>
     {
     public:
-        CListIterator(Node *value, bool isReverse = false)
+        CListIterator(Node *value, bool isReverse)
                 : m_node(value), m_isReverse(isReverse)
         { }
 
@@ -140,17 +135,18 @@ public:
             return *this;
         }
 
-    private:
         Node *operator->() const
         {
             return m_node;
         }
 
+    private:
         Node *m_node = nullptr;
         bool m_isReverse = false;
     };
 
     typedef CListIterator<T> ListIterator;
+    typedef CListIterator<const T> ConstListIterator;
 
     ListIterator begin()
     {
@@ -172,7 +168,27 @@ public:
         return ListIterator(m_head->m_prev, true);
     }
 
-    void Insert(const ListIterator &listIterator, const T & value)
+    const ConstListIterator cbegin() const
+    {
+        return ListIterator(m_head, false);
+    }
+
+    const ConstListIterator cend() const
+    {
+        return ListIterator(m_tail->m_next, false);
+    }
+
+    const ConstListIterator crbegin() const
+    {
+        return ListIterator(m_tail, true);
+    }
+
+    const ConstListIterator crend() const
+    {
+        return ListIterator(m_head->m_prev, true);
+    }
+
+    void Insert(const ListIterator &listIterator, const T &value)
     {
         if (listIterator == begin())
         {
@@ -184,46 +200,51 @@ public:
         }
         else
         {
-            Node* node = new Node(value, std::move(listIterator->m_prev->m_next), listIterator->m_prev);
+            Node *node = new Node(value, std::move(listIterator->m_prev->m_next), listIterator->m_prev);
             listIterator->m_prev = std::move(node);
             node->m_prev->m_next = std::move(node);
         }
     }
 
-    void Erase(const ListIterator & listIterator)
+    CMyList(CMyList &cMyList)
     {
-        if (m_elements == 1)
+        CMyList<T> tmp;
+        for (auto &it : cMyList)
+        {
+            tmp.PushBack(it);
+        }
+        std::swap(m_head, tmp.m_head);
+        std::swap(m_tail, tmp.m_tail);
+        std::swap(m_size, tmp.m_size);
+    }
+
+    void Erase(const ListIterator &listIterator)
+    {
+        if (m_size == 1)
         {
             Clear();
             return;
         }
-
         if (listIterator == begin())
         {
             listIterator->m_next->m_prev = nullptr;
             m_head = std::move(listIterator->m_next);
-        }
-        else if (listIterator->m_data == GetBackElement())
-        {
-            listIterator->m_prev->m_next = nullptr;
-            m_tail = std::move(listIterator->m_prev);
         }
         else
         {
             listIterator->m_next->m_prev = std::move(listIterator->m_prev);
             listIterator->m_prev->m_next = std::move(listIterator->m_next);
         }
-
-        if (m_elements > 0)
+        if (m_size > 0)
         {
-            m_elements--;
+            m_size--;
         }
     }
 
 private:
     Node *m_head = nullptr;
     Node *m_tail = nullptr;
-    size_t m_elements = 0;
+    size_t m_size = 0;
 };
 
 
