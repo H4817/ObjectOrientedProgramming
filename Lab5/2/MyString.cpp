@@ -70,3 +70,39 @@ void CMyString::Clear()
     m_length = 0;
 }
 
+CMyString &CMyString::operator=(CMyString const &cMyString)
+{
+    if (*this != cMyString)
+    {
+        auto tmp = cMyString;
+        std::swap(m_data, tmp.m_data);
+        std::swap(m_length, tmp.m_length);
+    }
+    else
+    {
+        throw;
+    }
+    return *this;
+}
+
+CMyString &CMyString::operator+=(CMyString const &cMyString)
+{
+    *this = *this + cMyString;
+    return *this;
+}
+
+char &CMyString::operator[](size_t position)
+{
+    if (position <= m_length)
+        return m_data[position];
+    else
+        throw std::out_of_range("out of range");
+}
+
+const char &CMyString::operator[](size_t position) const
+{
+    if (position <= m_length)
+        return m_data[position];
+    else
+        throw std::out_of_range("out of range");
+}
