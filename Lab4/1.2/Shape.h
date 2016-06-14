@@ -27,6 +27,23 @@ public:
     virtual double GetArea() const = 0;
 
     virtual std::string ToString() const = 0;
+
+//    virtual Color GetLineColor() const = 0;
 };
 
+/*
+class IShapeImpl : IShape
+{
+    IShapeImpl() = default;
+    virtual ~IShapeImpl() = default;
+    Color GetLineColor() const
+    {
+        return m_lineColor;
+    }
+
+protected:
+    Color m_lineColor;
+};
+
+*/
 

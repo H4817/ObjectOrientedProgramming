@@ -2,8 +2,8 @@
 #include <cmath>
 #include <sstream>
 
-CLineSegment::CLineSegment(const std::pair<int, int> &firstPoint, const std::pair<int, int> &secondPoint)
-        : m_firstPoint(firstPoint), m_secondPoint(secondPoint)
+CLineSegment::CLineSegment(const std::pair<int, int> &firstPoint, const std::pair<int, int> &secondPoint, const Color & lineColor)
+        : m_firstPoint(firstPoint), m_secondPoint(secondPoint), m_lineColor(lineColor)
 {
     m_length = GetLengthOfLine();
 }

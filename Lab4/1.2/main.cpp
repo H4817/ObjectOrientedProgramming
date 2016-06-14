@@ -8,6 +8,8 @@
 #include "Circle.h"
 #include <algorithm>
 #include <memory>
+#include <SFML/Graphics.hpp>
+
 
 using namespace std;
 
@@ -57,7 +59,7 @@ void WorkWithUser(vector<std::shared_ptr<IShape>> &shapes, Color &lineColor, Col
             std::pair<int, int> firstPoint;
             std::pair<int, int> secondPoint;
             cin >> firstPoint.first >> firstPoint.second >> secondPoint.first >> secondPoint.second;
-            shapes.push_back(make_shared<CLineSegment>(CLineSegment(firstPoint, secondPoint)));
+            shapes.push_back(make_shared<CLineSegment>(CLineSegment(firstPoint, secondPoint, lineColor)));
         }
         else if (shape == "Point")
         {
@@ -98,6 +100,26 @@ int main()
     Color backgroundColor;
     Color lineColor;
     vector<std::shared_ptr<IShape>> shapes;
-    WorkWithUser(shapes, lineColor, backgroundColor);
+//    WorkWithUser(shapes, lineColor, backgroundColor);
+
+    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::CircleShape shape(100.f);
+    shape.setFillColor(sf::Color::Green);
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.clear();
+        window.draw(shape);
+        window.display();
+    }
+
+
     return 0;
 }

@@ -9,9 +9,18 @@ public:
 	ISolidShape();
     virtual Color GetBackgroundColor()const;
     virtual Color GetLineColor()const;
-
 protected:
     Color m_backgroundColor;
-	Color m_lineColor;
+    Color m_lineColor;
+
 };
+
+/*
+class ISolidShapeImpl : public ISolidShape
+{
+    ISolidShapeImpl() = default;
+    virtual ~ISolidShapeImpl() = default;
+
+};
+*/
 
