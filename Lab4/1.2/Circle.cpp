@@ -2,8 +2,11 @@
 #include <math.h>
 #include <sstream>
 
-CCircle::CCircle(std::pair<int, int> center, int radius) : m_center(center), m_radius(radius)
+CCircle::CCircle(std::pair<int, int> center, int radius, const Color &lineColor, const Color &backgroundColor)
+        : m_center(center), m_radius(radius)
 {
+    m_lineColor = lineColor;
+    m_backgroundColor = backgroundColor;
 }
 
 double CCircle::GetPerimeter() const

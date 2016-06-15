@@ -2,11 +2,11 @@
 
 #include "SolidShape.h"
 
-class CRectangle : public ISolidShape
+class CRectangle : public CSolidShape
 {
 public:
     CRectangle(std::pair<int, int> coordinatesOfPoint,
-              std::pair<int, int> widthAndHeight);
+              std::pair<int, int> widthAndHeight, const Color & lineColor, const Color & backgroundColor);
 
     double GetPerimeter() const override;
 

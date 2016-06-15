@@ -2,10 +2,10 @@
 
 #include "SolidShape.h"
 
-class CCircle : public ISolidShape
+class CCircle : public CSolidShape
 {
 public:
-    CCircle(std::pair<int, int> center, int radius);
+    CCircle(std::pair<int, int> center, int radius, const Color & lineColor, const Color & backgroundColor);
 
     double GetPerimeter() const override;
 

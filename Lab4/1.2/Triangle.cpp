@@ -1,8 +1,10 @@
 #include "Triangle.h"
 
-CTriangle::CTriangle(std::pair<int, int> firstPoint, std::pair<int, int> secondPoint, std::pair<int, int> thirdPoint)
+CTriangle::CTriangle(std::pair<int, int> firstPoint, std::pair<int, int> secondPoint, std::pair<int, int> thirdPoint, const Color & lineColor, const Color & backgroundColor)
         : m_firstPoint(firstPoint), m_secondPoint(secondPoint), m_thirdPoint(thirdPoint)
 {
+    m_lineColor = lineColor;
+    m_backgroundColor = backgroundColor;
     CalculateLengthsOfSides();
     CalculatePerimeter();
     CalculateArea();

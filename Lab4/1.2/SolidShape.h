@@ -2,25 +2,23 @@
 
 #include "Shape.h"
 
-// Remove implementation details from interface
 class ISolidShape : public IShape
 {
 public:
-	ISolidShape();
-    virtual Color GetBackgroundColor()const;
-    virtual Color GetLineColor()const;
+    virtual ~ISolidShape() = default;
+
+    virtual Color GetBackgroundColor() const = 0;
+};
+
+class CSolidShape : public ISolidShape
+{
+public:
+    Color GetBackgroundColor() const override;
+
+    Color GetLineColor() const override;
+
 protected:
     Color m_backgroundColor;
     Color m_lineColor;
-
 };
-
-/*
-class ISolidShapeImpl : public ISolidShape
-{
-    ISolidShapeImpl() = default;
-    virtual ~ISolidShapeImpl() = default;
-
-};
-*/
 

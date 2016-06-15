@@ -5,16 +5,20 @@
 
 struct Color
 {
-	Color() = default;
-	Color(int r, int g, int b)
-		: r(r)
-		, g(g)
-		, b(b)
-	{};
+    Color() = default;
 
-	int r = 0;
-	int g = 0;
-	int b = 0;
+    Color(int r, int g, int b)
+            : r(r), g(g), b(b)
+    { };
+
+    int r = 0;
+    int g = 0;
+    int b = 0;
+
+    bool operator==(const Color &color)
+    {
+        return this->r == color.r && this->g == color.g && this->b == color.b;
+    }
 };
 
 class IShape
@@ -28,22 +32,8 @@ public:
 
     virtual std::string ToString() const = 0;
 
-//    virtual Color GetLineColor() const = 0;
+    virtual Color GetLineColor() const = 0;
 };
 
-/*
-class IShapeImpl : IShape
-{
-    IShapeImpl() = default;
-    virtual ~IShapeImpl() = default;
-    Color GetLineColor() const
-    {
-        return m_lineColor;
-    }
 
-protected:
-    Color m_lineColor;
-};
-
-*/
 

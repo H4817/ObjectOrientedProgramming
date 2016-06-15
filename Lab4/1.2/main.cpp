@@ -9,16 +9,19 @@
 #include <algorithm>
 #include <memory>
 #include <SFML/Graphics.hpp>
+#include <stdlib.h>
 
 
 using namespace std;
 
 void PrintSortedByPerimeter(vector<std::shared_ptr<IShape>> &shapes)
 {
-    typedef std::shared_ptr <IShape> IShapePtr;
-    std::sort(shapes.begin(), shapes.end(), [](std::shared_ptr <IShape> const &shape1, std::shared_ptr <IShape> const &shape2) {
+    typedef std::shared_ptr<IShape> IShapePtr;
+    std::sort(shapes.begin(), shapes.end(),
+              [](std::shared_ptr<IShape> const &shape1, std::shared_ptr<IShape> const &shape2)
+              {
                   return shape1->GetArea() > shape2->GetArea();
-    });
+              });
     for (auto it : shapes)
     {
         cout << it->ToString() << endl;
@@ -40,10 +43,12 @@ void PrintSortedByArea(vector<std::shared_ptr<IShape>> &shapes)
     }
 }
 
-void WorkWithUser(vector<std::shared_ptr<IShape>> &shapes, Color &lineColor, Color &backgroundColor)
+void WorkWithUser(vector<std::shared_ptr<IShape>> &shapes)
 {
     cout << "Type some commands or press q for exit" << endl;
     string shape;
+    Color lineColor;
+    Color backgroundColor;
     for (; ;)
     {
         cout << "> ";
@@ -65,7 +70,7 @@ void WorkWithUser(vector<std::shared_ptr<IShape>> &shapes, Color &lineColor, Col
         {
             std::pair<int, int> coordinates;
             cin >> coordinates.first >> coordinates.second;
-            shapes.push_back(std::make_shared<CPoint>(CPoint(coordinates)));
+            shapes.push_back(std::make_shared<CPoint>(CPoint(coordinates, lineColor)));
         }
         else if (shape == "Triangle")
         {
@@ -75,7 +80,8 @@ void WorkWithUser(vector<std::shared_ptr<IShape>> &shapes, Color &lineColor, Col
 
             cin >> firstPoint.first >> firstPoint.second >> secondPoint.first >> secondPoint.second >>
             thirdPoint.first >> thirdPoint.second;
-            shapes.push_back(std::make_shared<CTriangle>(CTriangle(firstPoint, secondPoint, thirdPoint)));
+            shapes.push_back(std::make_shared<CTriangle>(
+                    CTriangle(firstPoint, secondPoint, thirdPoint, lineColor, backgroundColor)));
         }
         else if (shape == "Rectangle")
         {
@@ -83,43 +89,23 @@ void WorkWithUser(vector<std::shared_ptr<IShape>> &shapes, Color &lineColor, Col
             std::pair<int, int> widthAndHeight;
             cin >> coordinatesOfPoint.first >> coordinatesOfPoint.second >> widthAndHeight.first >>
             widthAndHeight.second;
-            shapes.push_back(std::make_shared<CRectangle>(CRectangle(coordinatesOfPoint, widthAndHeight)));
+            shapes.push_back(std::make_shared<CRectangle>(
+                    CRectangle(coordinatesOfPoint, widthAndHeight, lineColor, backgroundColor)));
         }
         else if (shape == "Circle")
         {
             std::pair<int, int> center;
             int radius;
             cin >> center.first >> center.second >> radius;
-            shapes.push_back(std::make_shared<CCircle>(CCircle(center, radius)));
+            shapes.push_back(std::make_shared<CCircle>(CCircle(center, radius, lineColor, backgroundColor)));
         }
     }
 }
 
+
 int main()
 {
-    Color backgroundColor;
-    Color lineColor;
     vector<std::shared_ptr<IShape>> shapes;
-//    WorkWithUser(shapes, lineColor, backgroundColor);
-
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
-
-
+    WorkWithUser(shapes);
     return 0;
 }

@@ -3,8 +3,10 @@
 #include <string>
 
 
-CPoint::CPoint(std::pair<int, int> coordinates) : m_coordinates(coordinates)
-{ }
+CPoint::CPoint(std::pair<int, int> coordinates, const Color & lineColor) : m_coordinates(coordinates)
+{
+    m_lineColor = lineColor;
+}
 
 double CPoint::GetPerimeter() const
 {
@@ -14,6 +16,11 @@ double CPoint::GetPerimeter() const
 double CPoint::GetArea() const
 {
     return 0;
+}
+
+Color CPoint::GetLineColor() const
+{
+    return m_lineColor;
 }
 
 std::string CPoint::ToString() const

@@ -1,10 +1,12 @@
 #include <sstream>
 #include "Rectangle.h"
 
-CRectangle::CRectangle(std::pair<int, int> coordinatesOfPoint, std::pair<int, int> widthAndHeight)
-        : m_coordinatesOfPoint(
-        coordinatesOfPoint), m_size(widthAndHeight)
+CRectangle::CRectangle(std::pair<int, int> coordinatesOfPoint, std::pair<int, int> widthAndHeight,
+                       const Color &lineColor, const Color &backgroundColor)
+        : m_coordinatesOfPoint(coordinatesOfPoint), m_size(widthAndHeight)
 {
+    m_lineColor = lineColor;
+    m_backgroundColor = backgroundColor;
 }
 
 double CRectangle::GetPerimeter() const

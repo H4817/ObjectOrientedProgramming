@@ -4,10 +4,10 @@
 #include <cmath>
 #include <sstream>
 
-class CTriangle : public ISolidShape
+class CTriangle : public CSolidShape
 {
 public:
-    CTriangle(std::pair<int, int> firstPoint, std::pair<int, int> secondPoint, std::pair<int, int> thirdPoint);
+    CTriangle(std::pair<int, int> firstPoint, std::pair<int, int> secondPoint, std::pair<int, int> thirdPoint, const Color & lineColor, const Color & backgroundColor);
 
     double GetPerimeter() const override;
 
@@ -23,8 +23,6 @@ private:
     void CalculatePerimeter();
 
     void CalculateArea();
-    Color m_lineColor;
-    Color m_backgroundColor;
     std::pair<int, int> m_firstPoint;
     std::pair<int, int> m_secondPoint;
     std::pair<int, int> m_thirdPoint;
