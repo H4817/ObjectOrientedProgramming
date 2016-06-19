@@ -3,7 +3,7 @@
 #include <memory>
 
 
-CMyString::CMyString() : m_data('\0'), m_length(0)
+CMyString::CMyString() : m_data(nullptr), m_length(0)
 { }
 
 CMyString::CMyString(const char *pString) : CMyString(pString, strlen(pString))
@@ -57,7 +57,7 @@ const CMyString CMyString::SubString(size_t start, size_t length) const
     {
         return CMyString();
     }
-    else if ((m_length < start + length) || (start + length + 1) == start)
+    if ((m_length < start + length) || length + 1 == 0)
     {
         length = m_length - start;
     }
@@ -78,11 +78,78 @@ CMyString &CMyString::operator=(CMyString const &cMyString)
         std::swap(m_data, tmp.m_data);
         std::swap(m_length, tmp.m_length);
     }
-    else
-    {
-        throw;
-    }
     return *this;
+}
+
+bool const operator==(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    if (cMyString1.GetLength() != cMyString2.GetLength())
+    {
+        return false;
+    }
+    return memcmp(cMyString1.GetStringData(), cMyString2.GetStringData(), cMyString1.GetLength()) == 0;
+}
+
+bool const operator!=(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    if (cMyString1.GetLength() != cMyString2.GetLength())
+    {
+        return true;
+    }
+    return memcmp(cMyString1.GetStringData(), cMyString2.GetStringData(), cMyString1.GetLength()) != 0;
+}
+
+bool const operator>(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    return cMyString1.GetLength() > cMyString2.GetLength();
+}
+
+bool const operator<(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    return cMyString1.GetLength() < cMyString2.GetLength();
+}
+
+bool const operator>=(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    return cMyString1.GetLength() >= cMyString2.GetLength();
+}
+
+bool const operator<=(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    return cMyString1.GetLength() <= cMyString2.GetLength();
+}
+
+CMyString const operator+(CMyString const &cMyString1, CMyString const &cMyString2)
+{
+    std::string str1(cMyString1.GetStringData());
+    std::string str2(cMyString2.GetStringData());
+    return CMyString((str1 + str2).c_str(), cMyString1.GetLength() + cMyString2.GetLength());
+}
+
+CMyString const operator+(const std::string &str1, CMyString const &cMyString2)
+{
+    std::string str2(cMyString2.GetStringData());
+    return CMyString((str1 + str2).c_str(), str1.length() + cMyString2.GetLength());
+}
+
+CMyString const operator+(const char *ch, CMyString const &cMyString2)
+{
+    std::string str1(ch);
+    std::string str2(cMyString2.GetStringData());
+    return CMyString((str1 + str2).c_str(), strlen(ch) + cMyString2.GetLength());
+}
+
+std::ostream &operator<<(std::ostream &outputStream, CMyString const &cMyString)
+{
+    return outputStream << cMyString.GetStringData();
+}
+
+std::istream &operator>>(std::istream &inputStream, CMyString &cMyString)
+{
+    std::string tmp;
+    inputStream >> tmp;
+    cMyString = tmp;
+    return inputStream;
 }
 
 CMyString &CMyString::operator+=(CMyString const &cMyString)
