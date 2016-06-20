@@ -43,6 +43,16 @@ void PrintSortedByArea(vector<std::shared_ptr<IShape>> &shapes)
     }
 }
 
+void SetColor(Color &color)
+{
+    std::string str;
+    cin >> str;
+    auto colorValue  = stoi(str.substr(1), 0, 16);
+    color.r = colorValue / 0x10000;
+    color.g = (colorValue / 0x100) % 0x100;
+    color.b = colorValue % 0x100;
+}
+
 void WorkWithUser(vector<std::shared_ptr<IShape>> &shapes)
 {
     cout << "Type some commands or press q for exit" << endl;
@@ -64,12 +74,14 @@ void WorkWithUser(vector<std::shared_ptr<IShape>> &shapes)
             std::pair<int, int> firstPoint;
             std::pair<int, int> secondPoint;
             cin >> firstPoint.first >> firstPoint.second >> secondPoint.first >> secondPoint.second;
+            SetColor(lineColor);
             shapes.push_back(make_shared<CLineSegment>(CLineSegment(firstPoint, secondPoint, lineColor)));
         }
         else if (shape == "Point")
         {
             std::pair<int, int> coordinates;
             cin >> coordinates.first >> coordinates.second;
+            SetColor(lineColor);
             shapes.push_back(std::make_shared<CPoint>(CPoint(coordinates, lineColor)));
         }
         else if (shape == "Triangle")
@@ -80,6 +92,8 @@ void WorkWithUser(vector<std::shared_ptr<IShape>> &shapes)
 
             cin >> firstPoint.first >> firstPoint.second >> secondPoint.first >> secondPoint.second >>
             thirdPoint.first >> thirdPoint.second;
+            SetColor(lineColor);
+            SetColor(backgroundColor);
             shapes.push_back(std::make_shared<CTriangle>(
                     CTriangle(firstPoint, secondPoint, thirdPoint, lineColor, backgroundColor)));
         }
@@ -89,6 +103,8 @@ void WorkWithUser(vector<std::shared_ptr<IShape>> &shapes)
             std::pair<int, int> widthAndHeight;
             cin >> coordinatesOfPoint.first >> coordinatesOfPoint.second >> widthAndHeight.first >>
             widthAndHeight.second;
+            SetColor(lineColor);
+            SetColor(backgroundColor);
             shapes.push_back(std::make_shared<CRectangle>(
                     CRectangle(coordinatesOfPoint, widthAndHeight, lineColor, backgroundColor)));
         }
@@ -97,7 +113,14 @@ void WorkWithUser(vector<std::shared_ptr<IShape>> &shapes)
             std::pair<int, int> center;
             int radius;
             cin >> center.first >> center.second >> radius;
+            SetColor(lineColor);
+            SetColor(backgroundColor);
             shapes.push_back(std::make_shared<CCircle>(CCircle(center, radius, lineColor, backgroundColor)));
+        }
+        else
+        {
+            std::cout << "unknown command: " << shape << std::endl;
+            break;
         }
     }
 }
