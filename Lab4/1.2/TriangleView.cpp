@@ -9,7 +9,7 @@ CTriangleView::CTriangleView(const sf::Vector2f &firstPoint, const sf::Vector2f 
     m_triangle.setPoint(2, thirdPoint);
     m_triangle.setOutlineColor(GetColor(lineColor));
     m_triangle.setFillColor(GetColor(backgroundColor));
-    m_triangle.setOutlineThickness(1.f);
+    m_triangle.setOutlineThickness(2.f);
 }
 
 void CTriangleView::draw(sf::RenderTarget & target, sf::RenderStates states) const
