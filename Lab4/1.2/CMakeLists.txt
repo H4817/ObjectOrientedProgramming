@@ -23,7 +23,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 
 # Define sources and executable
 set(EXECUTABLE_NAME "myproject")
-add_executable(${EXECUTABLE_NAME} main.cpp Shape.h LineSegment.cpp LineSegment.h Point.cpp Point.h SolidShape.cpp SolidShape.h Triangle.h Triangle.cpp Rectangle.cpp Rectangle.h Circle.cpp Circle.h)
+add_executable(${EXECUTABLE_NAME} main.cpp Shape.h LineSegment.cpp LineSegment.h Point.cpp Point.h SolidShape.cpp SolidShape.h Triangle.h Triangle.cpp Rectangle.cpp Rectangle.h Circle.cpp Circle.h ShapeViewer.h ShapeViewer.cpp CircleView.h CircleView.cpp TriangleView.h TriangleView.cpp RectangleView.h RectangleView.cpp LineSegmentView.h LineSegmentView.cpp)
 
 
 # Detect and add SFML

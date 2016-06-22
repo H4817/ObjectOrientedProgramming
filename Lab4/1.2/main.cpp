@@ -17,6 +17,29 @@
 
 using namespace std;
 
+void DrawShapes(vector<std::shared_ptr<CShapeViewer>> &shapesView)
+{
+    sf::RenderWindow window;
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;
+    window.create(sf::VideoMode(800, 800), "Shapes", sf::Style::Default, settings);
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+        window.clear(sf::Color::White);
+        for (auto ptr : shapesView)
+        {
+            window.draw(*ptr);
+        }
+        window.display();
+    }
+}
+
 void SetColor(Color &color)
 {
     std::string str;
@@ -36,7 +59,7 @@ void AddPoint(vector<std::shared_ptr<IShape>> &shapes)
     shapes.push_back(std::make_shared<CPoint>(CPoint(coordinates, lineColor)));
 }
 
-void AddLineSegment(vector<std::shared_ptr<IShape>> &shapes)
+void AddLineSegment(vector<std::shared_ptr<IShape>> &shapes, vector<std::shared_ptr<CShapeViewer>> &shapesView)
 {
     Color color;
     std::pair<int, int> firstPoint;
@@ -44,9 +67,13 @@ void AddLineSegment(vector<std::shared_ptr<IShape>> &shapes)
     cin >> firstPoint.first >> firstPoint.second >> secondPoint.first >> secondPoint.second;
     SetColor(color);
     shapes.push_back(make_shared<CLineSegment>(CLineSegment(firstPoint, secondPoint, color)));
+    shapesView.push_back(std::make_shared<CLineSegmentView>(
+            CLineSegmentView({firstPoint.first, firstPoint.second},
+                             {secondPoint.first, secondPoint.second}, color
+            )));
 }
 
-void AddCircle(vector<std::shared_ptr<IShape>> &shapes)
+void AddCircle(vector<std::shared_ptr<IShape>> &shapes, vector<std::shared_ptr<CShapeViewer>> &shapesView)
 {
     Color lineColor;
     Color backgroundColor;
@@ -56,9 +83,12 @@ void AddCircle(vector<std::shared_ptr<IShape>> &shapes)
     SetColor(lineColor);
     SetColor(backgroundColor);
     shapes.push_back(std::make_shared<CCircle>(CCircle(center, radius, lineColor, backgroundColor)));
+    shapesView.push_back(std::make_shared<CCircleView>(
+            CCircleView({center.first, center.second}, radius, lineColor,
+                        backgroundColor)));
 }
 
-void AddRectangle(vector<std::shared_ptr<IShape>> &shapes)
+void AddRectangle(vector<std::shared_ptr<IShape>> &shapes, vector<std::shared_ptr<CShapeViewer>> &shapesView)
 {
     Color lineColor;
     Color backgroundColor;
@@ -70,9 +100,14 @@ void AddRectangle(vector<std::shared_ptr<IShape>> &shapes)
     SetColor(backgroundColor);
     shapes.push_back(std::make_shared<CRectangle>(
             CRectangle(coordinatesOfPoint, widthAndHeight, lineColor, backgroundColor)));
+    shapesView.push_back(std::make_shared<CRectangleView>(
+            CRectangleView(
+                    {coordinatesOfPoint.first, coordinatesOfPoint.second},
+                    {widthAndHeight.first, widthAndHeight.second}, lineColor,
+                    backgroundColor)));
 }
 
-void AddTriangle(vector<std::shared_ptr<IShape>> &shapes)
+void AddTriangle(vector<std::shared_ptr<IShape>> &shapes, vector<std::shared_ptr<CShapeViewer>> &shapesView)
 {
     Color lineColor;
     Color backgroundColor;
@@ -86,6 +121,12 @@ void AddTriangle(vector<std::shared_ptr<IShape>> &shapes)
     SetColor(backgroundColor);
     shapes.push_back(std::make_shared<CTriangle>(
             CTriangle(firstPoint, secondPoint, thirdPoint, lineColor, backgroundColor)));
+    shapesView.push_back(std::make_shared<CTriangleView>(
+            CTriangleView(
+                    {firstPoint.first, firstPoint.second},
+                    {secondPoint.first, secondPoint.second},
+                    {thirdPoint.first, thirdPoint.second}, lineColor,
+                    backgroundColor)));
 }
 
 void PrintSortedByPerimeter(vector<std::shared_ptr<IShape>> &shapes)
@@ -120,41 +161,54 @@ void PrintSortedByArea(vector<std::shared_ptr<IShape>> &shapes)
 void WorkWithUser()
 {
     vector<std::shared_ptr<IShape>> shapes;
-    cout << "Type some commands or press q for exit" << endl;
-    string shape;
+    vector<std::shared_ptr<CShapeViewer>> shapesView;
+    cout << "<<<List of commands>>>\n";
+    cout << "q - exit\n";
+    cout << "draw - draw existed shapes\n";
+    cout << "Point <x, y, color>\n";
+    cout << "LineSegment <x1, y1, x2, y2, color>\n";
+    cout << "Circle <x, y, r, lineColor, bgColor>\n";
+    cout << "Rectangle <x, y, w, h, lineColor, bgColor>\n";
+    cout << "Triangle <x1, y1, x2, y2, x3, y3, lineColor, bgColor>\n";
+    cout << "<<<Another commands are not supported>>>\n";
+    string command;
     for (; ;)
     {
         cout << "> ";
-        cin >> shape;
-        if (shape == "q")
+        cin >> command;
+        if (command == "q")
         {
             PrintSortedByPerimeter(shapes);
             PrintSortedByArea(shapes);
             break;
         }
-        if (shape == "Point")
+        else if (command == "draw")
+        {
+            DrawShapes(shapesView);
+        }
+        else if (command == "Point")
         {
             AddPoint(shapes);
         }
-        else if (shape == "LineSegment")
+        else if (command == "LineSegment")
         {
-            AddLineSegment(shapes);
+            AddLineSegment(shapes, shapesView);
         }
-        else if (shape == "Triangle")
+        else if (command == "Triangle")
         {
-            AddTriangle(shapes);
+            AddTriangle(shapes, shapesView);
         }
-        else if (shape == "Rectangle")
+        else if (command == "Rectangle")
         {
-            AddRectangle(shapes);
+            AddRectangle(shapes, shapesView);
         }
-        else if (shape == "Circle")
+        else if (command == "Circle")
         {
-            AddCircle(shapes);
+            AddCircle(shapes, shapesView);
         }
         else
         {
-            std::cout << "unknown command: " << shape << std::endl;
+            std::cout << "unknown command: " << command << std::endl;
             break;
         }
     }
