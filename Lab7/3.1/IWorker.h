@@ -1,9 +1,12 @@
 #pragma once
 
+#include "IPerson.h"
 #include "PersonImpl.h"
 
-class IWorker : public CPersonImpl
+class IWorker : public CPersonImpl<IPerson>
 {
-protected:
+public:
     virtual std::string GetProfession() const;
+
+    virtual void SetProfession(const std::string profession);
 };
