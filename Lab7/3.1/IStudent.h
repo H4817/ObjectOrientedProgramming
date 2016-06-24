@@ -1,12 +1,13 @@
 #pragma once
 
+#include "IPerson.h"
 #include "PersonImpl.h"
-#include "StudentImpl.h"
 
-class IStudent : public CPersonImpl
+class IStudent : public CPersonImpl<IPerson>
 {
-protected:
-
-    std::string nameOfCollege;
-    std::string numberOfStudentsCard;
+public:
+    virtual const std::string &GetNameOfCollege() const = 0;
+    virtual void SetNameOfCollege(const std::string &nameOfCollege) = 0;
+    virtual const std::string &GetNumberOfStudentsCard() const = 0;
+    virtual void SetNumberOfStudentsCard(const std::string &numberOfStudentsCard) = 0;
 };

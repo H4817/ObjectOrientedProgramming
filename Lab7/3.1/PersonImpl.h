@@ -4,23 +4,22 @@ template<typename Base>
 class CPersonImpl : public Base
 {
 public:
-
-    void SetFirstName(const string firstName)
+    virtual void SetFirstName(const std::string firstName)
     {
         CPersonImpl::firstName = firstName;
     }
 
-    void SetSecondName(const string secondName)
+    virtual void SetSecondName(const std::string secondName)
     {
         CPersonImpl::secondName = secondName;
     }
 
-    void SetPatronymic(const string patronymic)
+    virtual void SetPatronymic(const std::string patronymic)
     {
         CPersonImpl::patronymic = patronymic;
     }
 
-    void SetAddress(const string address)
+    virtual void SetAddress(const std::string address)
     {
         CPersonImpl::address = address;
     }
@@ -40,7 +39,7 @@ public:
         return patronymic;
     }
 
-    virtual string GetAddress() const
+    virtual std::string GetAddress() const
     {
         return address;
     }

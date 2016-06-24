@@ -5,7 +5,7 @@
 class CTeacher : public CPersonImpl<ITeacher>
 {
 public:
-    virtual string GetNameOfSchoolSubject() const
+    virtual std::string GetNameOfSchoolSubject() const
     {
         return m_nameOfSchoolSubject;
     }

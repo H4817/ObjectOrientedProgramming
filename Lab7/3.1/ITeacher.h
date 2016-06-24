@@ -1,11 +1,12 @@
 #pragma once
 
+#include "IPerson.h"
 #include "PersonImpl.h"
 
 class ITeacher : public CPersonImpl<IPerson>
 {
 public:
-    virtual string GetNameOfSchoolSubject() const;
+    virtual std::string GetNameOfSchoolSubject() const = 0;
 
-    virtual void SetNameOfSchoolSubject(const std::string nameOfSchoolSubject);
+    virtual void SetNameOfSchoolSubject(const std::string nameOfSchoolSubject) = 0;
 };

@@ -1,15 +1,16 @@
 #pragma once
 
+#include "IPerson.h"
 #include "PersonImpl.h"
 
 class IPupil : public CPersonImpl<IPerson>
 {
 public:
-    virtual string GetNameOfSchool() const;
+    virtual std::string GetNameOfSchool() const = 0;
 
-    virtual string GetNameOfClass() const;
+    virtual std::string GetNameOfClass() const = 0;
 
-    virtual void SetNameOfSchool(const std::string nameOfSchool);
+    virtual void SetNameOfSchool(const std::string nameOfSchool) = 0;
 
-    virtual void SetNameOfClass(const std::string nameOfClass);
+    virtual void SetNameOfClass(const std::string nameOfClass) = 0;
 };
