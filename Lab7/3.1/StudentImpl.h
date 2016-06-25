@@ -1,10 +1,10 @@
 #pragma once
 
 #include "IStudent.h"
-//#include "IPerson.h"
 #include "PersonImpl.h"
 
-class CStudentImpl : public CPersonImpl<IStudent>
+template <typename Base>
+class CStudentImpl : public CPersonImpl<Base>
 {
 public:
     const std::string &GetNameOfCollege() const
